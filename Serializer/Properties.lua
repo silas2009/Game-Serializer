@@ -493,6 +493,9 @@ for i,v in pairs(module.InstanceProperties) do
 	for _,propName in pairs(InstanceBaseClasses.Instance) do
 		table.insert(v,propName)
 	end
+	if not module.Properties[i] then
+		module.Properties[i] = {}
+	end
 end
 
 for i,v in pairs(module.Properties) do
