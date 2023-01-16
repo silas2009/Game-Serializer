@@ -45,7 +45,7 @@ local BaseClasses = {
 		"TopSurface"
 	},
 	ValueBase = {"Value"},
-	["Instance"] = {"Archivable","Name","ClassName"}
+	["Instance"] = {"Archivable","Name"}
 }
 
 module.Properties = {
@@ -489,15 +489,22 @@ for className,v in pairs(InheritedClasses) do
 	end
 end
 
-for i,v in pairs(module.Properties) do
-	for _,propName in pairs(BaseClasses.Instance) do
+for i,v in pairs(module.InstanceProperties) do
+	for _,propName in pairs(InstanceBaseClasses.Instance) do
 		table.insert(v,propName)
 	end
 end
 
-for i,v in pairs(module.InstanceProperties) do
-	for _,propName in pairs(InstanceBaseClasses.Instance) do
+for i,v in pairs(module.Properties) do
+	for _,propName in pairs(BaseClasses.Instance) do
 		table.insert(v,propName)
+	end
+	local instanceProps = module.InstanceProperties[i]
+	if not instanceProps then
+		module.InstanceProperties[i] = {}
+		for _,propName in pairs(InstanceBaseClasses.Instance) do
+			table.insert(module.InstanceProperties[i],propName)
+		end
 	end
 end
 
