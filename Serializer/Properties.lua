@@ -45,7 +45,7 @@ local BaseClasses = {
 		"TopSurface"
 	},
 	ValueBase = {"Value"},
-	["Instance"] = {"Archivable","Name"}
+	["Instance"] = {"Archivable","Name","ClassName"}
 }
 
 module.Properties = {
