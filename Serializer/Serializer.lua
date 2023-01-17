@@ -105,11 +105,5 @@ function module.Serialize(Object)
 	end
 	return objsSerialized
 end
-
-local obj = workspace.Couch
-local filename = "place" .. game.PlaceId
-if obj ~= workspace then
-    filename = obj.ClassName .. " " .. obj.Name
-end
 						
 return module
