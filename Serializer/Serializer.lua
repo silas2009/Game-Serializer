@@ -69,11 +69,17 @@ function module.Serialize(Object)
 				end
 				for _,prop in pairs(classProp) do
 					if not objSerialized[prop] then
-						local Function = SerializeValues[typeof(v[prop])]
+						local objProperty = v[prop]
+						if prop == "Anchored" then
+							if v:GetAttribute("Anchored") then
+								objProperty = v:GetAttribute("Anchored")
+							end
+						end
+						local Function = SerializeValues[typeof(objProperty)]
 						if Function then
-							objSerialized[prop] = Function(v[prop])
+							objSerialized[prop] = Function(objProperty)
 						else
-							objSerialized[prop] = v[prop]
+							objSerialized[prop] = objProperty
 						end
 						if typeof(objSerialized[prop]) == "string" and objSerialized[prop]:sub(1,32) == "http://www.roblox.com/asset/?id=" then
 							objSerialized[prop] = "rbxassetid://" .. string.sub(objSerialized[prop],33,string.len(objSerialized[prop]))
