@@ -70,8 +70,8 @@ function module.Serialize(Object)
 				for _,prop in pairs(classProp) do
 					if not objSerialized[prop] then
 						local objProperty = v[prop]
-						if prop == "Anchored" then
-							if v:GetAttribute("Anchored") then
+						if v:IsA("BasePart") and prop == "Anchored" then
+							if v:GetAttribute("Anchored") ~= nil then
 								objProperty = v:GetAttribute("Anchored")
 							end
 						end
