@@ -2,6 +2,9 @@ local Serialize = {}
 function Serialize.Vector3(Value:Vector3)
 	return {Type = typeof(Value),X = Value.X, Y = Value.Y, Z = Value.Z}
 end
+function Serialize.Vector2(Value:Vector2)
+	return {Type = typeof(Value),X = Value.X, Y = Value.Y}
+end
 function Serialize.EnumItem(Value:EnumItem)
 	return {Type = typeof(Value),Name=Value.Name,EnumType=tostring(Value.EnumType)}
 end
