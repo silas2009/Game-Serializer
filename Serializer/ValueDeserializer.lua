@@ -2,6 +2,9 @@ local Import = {}
 function Import.Vector3(Value)
 	return Vector3.new(Value.X, Value.Y, Value.Z)
 end
+function Import.Vector2(Value)
+	return Vector2.new(Value.X, Value.Y)
+end
 function Import.EnumItem(Value)
 	return Enum[Value.EnumType][Value.Name]
 end
