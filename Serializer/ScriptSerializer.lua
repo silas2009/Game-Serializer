@@ -1,6 +1,9 @@
 local module = {}
 
 local rs = game:GetService("ReplicatedStorage")
+local ScriptService = game:GetService("ReplicatedStorage").ScriptService
+local compression = require(ScriptService.Compression)
+local converter = require(ScriptService.LoadModules:FindFirstChild("0000000000000001"))
 local createBlock
 local openScript
 local saveScript
@@ -15,10 +18,12 @@ if game.PlaceId == 5846387555 then
 	setVariableInput = rs.RemoteFunctions.ScriptEditor.SetVariableInput
 	setOutputName = rs.RemoteFunctions.ScriptEditor.SetOutputName
 end
-local codeToTable = require(rs.ScriptService)
+function codeToTable(Script)
+	converter(compression.decompress(Script)
+end
 
 function module.deSerializeScript(Object,Script)
-	Script = codeToTable.loadScript(Script)
+	codeToTable(Script)
 	Script.Object = Object
 	openScript:InvokeServer(Script.Object)
 	
