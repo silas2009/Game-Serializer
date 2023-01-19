@@ -30,12 +30,12 @@ function module.deSerializeScript(Object,ScriptString)
 	
 	local amount = 0
 	for i,v in pairs(Script.Blocks) do
-		amount += amount
+		amount += 1
 	end
 	local current = 0
 	for blockName,block in pairs(Script.Blocks) do
-		current += 1
 		spawn(function()
+			current += 1
 			createBlock:InvokeServer(Script.Object,block.Type,blockName)
 			for InputName,InputData in pairs(block.Inputs) do
 				if InputData.UseVariable then
