@@ -1,4 +1,5 @@
-return function recurseTable(tbl,func)
+local functions = {}
+function functions.recurseTable(tbl,func)
 	for index, value in pairs(tbl) do
 		if typeof(value) == "table" then
 			recurseTable(value)
@@ -7,3 +8,5 @@ return function recurseTable(tbl,func)
 		end
 	end
 end
+
+return functions
