@@ -39,6 +39,7 @@ function module.deSerializeScript(Object,ScriptString)
 			print(blockName)
 			createBlock:InvokeServer(Script.Object,block.Type,blockName)
 			for InputName,InputData in pairs(block.Inputs) do
+				print(InputName,InputData.Value,InputData.Variable)
 				if InputData.UseVariable then
 					InputData.Value = ""
 					setVariableInput:InvokeServer(Script.Object,blockName,InputName,InputData.Variable)
@@ -46,7 +47,6 @@ function module.deSerializeScript(Object,ScriptString)
 					InputData.Variable = ""
 					setValueInput:InvokeServer(Script.Object,blockName,InputName,InputData.Value)
 				end
-				print(InputName,InputData.Value,InputData.Variable)
 			end
 			for OutputName,OutputValue in pairs(block.Outputs) do
 				setOutputName:InvokeServer(Script.Object,blockName,OutputName,OutputValue)
