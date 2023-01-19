@@ -23,7 +23,7 @@ function codeToTable(Script)
 end
 
 function module.deSerializeScript(Object,Script)
-	codeToTable(Script)
+	Script = codeToTable(Script)
 	Script.Object = Object
 	openScript:InvokeServer(Script.Object)
 	
