@@ -34,8 +34,8 @@ function module.deSerializeScript(Object,ScriptString)
 	end
 	local current = 0
 	for blockName,block in pairs(Script.Blocks) do
+		current += 1
 		spawn(function()
-			current += 1
 			createBlock:InvokeServer(Script.Object,block.Type,blockName)
 			for InputName,InputData in pairs(block.Inputs) do
 				if InputData.UseVariable then
