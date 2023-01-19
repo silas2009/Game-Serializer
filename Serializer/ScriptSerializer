@@ -1,0 +1,25 @@
+local module = {}
+
+local rs = game:GetService("ReplicatedStorage")
+local codeToTable = require(rs.ScriptService)
+local SerializeValues = loadstring(game:HttpGet("https://raw.githubusercontent.com/silas2009/Game-Serializer/main/Serializer/Values/ValueSerializer.lua"))()
+local functionsTable = loadstring(game:HttpGet("https://raw.githubusercontent.com/silas2009/Game-Serializer/main/Serializer/Misc/functions.lua"))()
+
+function module.serializeScript(Script)
+	local blockCodeData = codeToTable.loadScript(Script:GetAttribute("VisualSource"))
+	functionsTable.recurseTable(blockCodeData,
+		function(i,v)
+			local Function = SerializeValues[typeof(v)]
+			if Function then
+				blockCodeData[i] = Function(v)
+			else
+				blockCodeData[i] = v
+			end
+		end
+	)
+	
+	return blockCodeData
+end
+print(serializeScript(workspace.YEET).Blocks)
+
+return module
