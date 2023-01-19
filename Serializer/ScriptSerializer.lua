@@ -48,7 +48,7 @@ function module.deSerializeScript(Object,ScriptString)
 	Script.Object = Object
 	openScript:InvokeServer(Script.Object)
 	local done = false
-	
+
 	local amount = 0
 	for i,v in pairs(Script.Blocks) do
 		amount += 1
@@ -56,33 +56,27 @@ function module.deSerializeScript(Object,ScriptString)
 	local current = 0
 	setclipboard(stringify(Script,_,false))
 	for blockName,block in pairs(Script.Blocks) do
-		spawn(function()
-			current += 1
-			print(blockName)
-			createBlock:InvokeServer(Script.Object,block.Type,blockName)
-			for InputName,InputData in pairs(block.Inputs) do
-				print(InputName,InputData.Value,InputData.Variable)
-				if InputData.Variable then
-					InputData.Value = ""
-					setVariableInput:InvokeServer(Script.Object,blockName,InputName,InputData.Variable)
-				else
-					InputData.Variable = ""
-					setValueInput:InvokeServer(Script.Object,blockName,InputName,InputData.Value)
-				end
-					print("yeet")
+		print(blockName)
+		createBlock:InvokeServer(Script.Object,block.Type,blockName)
+		for InputName,InputData in pairs(block.Inputs) do
+			print(InputName,InputData.Value,InputData.Variable)
+			if InputData.Variable then
+				InputData.Value = ""
+				setVariableInput:InvokeServer(Script.Object,blockName,InputName,InputData.Variable)
+			else
+				InputData.Variable = ""
+				setValueInput:InvokeServer(Script.Object,blockName,InputName,InputData.Value)
 			end
-			for OutputName,OutputValue in pairs(block.Outputs) do
-				setOutputName:InvokeServer(Script.Object,blockName,OutputName,OutputValue)
-			end
-			if current == amount then
-				done = true
-			end
-		end)
+			print("yeet")
+		end
+		for OutputName,OutputValue in pairs(block.Outputs) do
+			setOutputName:InvokeServer(Script.Object,blockName,OutputName,OutputValue)
+		end
+		if current == amount then
+			done = true
+		end
 	end
-	spawn(function()
-		repeat task.wait() until done
-		saveScript:InvokeServer(Script)
-	end)
+	saveScript:InvokeServer(Script)
 end
 
 return module
