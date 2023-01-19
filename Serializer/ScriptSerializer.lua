@@ -1,12 +1,20 @@
 local module = {}
 
 local rs = game:GetService("ReplicatedStorage")
-local createBlock = rs.RemoteFunctions.ScriptEditor.CreateBlock
-local openScript = rs.RemoteFunctions.ScriptEditor.OpenScript
-local saveScript = rs.RemoteFunctions.ScriptEditor.ScriptSaveRequested
-local setValueInput = rs.RemoteFunctions.ScriptEditor.SetValueInput
-local setVariableInput = rs.RemoteFunctions.ScriptEditor.SetVariableInput
-local setOutputName = rs.RemoteFunctions.ScriptEditor.SetOutputName
+local createBlock
+local openScript
+local saveScript
+local setValueInput
+local setVariableInput
+local setOutputName
+if game.PlaceId == 5846387555 then
+	createBlock = rs.RemoteFunctions.ScriptEditor.CreateBlock
+	openScript = rs.RemoteFunctions.ScriptEditor.OpenScript
+	saveScript = rs.RemoteFunctions.ScriptEditor.ScriptSaveRequested
+	setValueInput = rs.RemoteFunctions.ScriptEditor.SetValueInput
+	setVariableInput = rs.RemoteFunctions.ScriptEditor.SetVariableInput
+	setOutputName = rs.RemoteFunctions.ScriptEditor.SetOutputName
+end
 local codeToTable = require(rs.ScriptService)
 
 function module.deSerializeScript(Object,Script)
