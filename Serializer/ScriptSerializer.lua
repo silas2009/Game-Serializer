@@ -21,6 +21,27 @@ end
 function codeToTable(Script)
 	return converter(compression.decompress(Script))
 end
+function stringify(v, spaces, usesemicolon, depth)
+	if type(v) ~= 'table' then
+		return tostring(v)
+	elseif not next(v) then
+		return '{}'
+	end
+
+	spaces = spaces or 4
+	depth = depth or 1
+
+	local space = (" "):rep(depth * spaces)
+	local sep = usesemicolon and ";" or ","
+	local concatenationBuilder = {"{"}
+
+	for k, x in next, v do
+		table.insert(concatenationBuilder, ("\n%s[%s] = %s%s"):format(space,type(k)=='number'and tostring(k)or('"%s"'):format(tostring(k)), stringify(x, spaces, usesemicolon, depth+1), sep))
+	end
+
+	local s = table.concat(concatenationBuilder)
+	return ("%s\n%s}"):format(s:sub(1,-2), space:sub(1, -spaces-1))
+end
 
 function module.deSerializeScript(Object,ScriptString)
 	local Script = codeToTable(ScriptString)
@@ -33,6 +54,7 @@ function module.deSerializeScript(Object,ScriptString)
 		amount += 1
 	end
 	local current = 0
+	setclipboard(stringify(Script,_,false))
 	for blockName,block in pairs(Script.Blocks) do
 		spawn(function()
 			current += 1
