@@ -22,8 +22,8 @@ function codeToTable(Script)
     return converter(compression.decompress(Script))
 end
 
-function module.deSerializeScript(Object,Script)
-	Script = codeToTable(Script)
+function module.deSerializeScript(Object,ScriptString)
+	local Script = codeToTable(ScriptString)
 	Script.Object = Object
 	openScript:InvokeServer(Script.Object)
 	
