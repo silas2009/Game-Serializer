@@ -36,13 +36,17 @@ function module.deSerializeScript(Object,ScriptString)
 	for blockName,block in pairs(Script.Blocks) do
 		spawn(function()
 			current += 1
+			print(blockName)
 			createBlock:InvokeServer(Script.Object,block.Type,blockName)
 			for InputName,InputData in pairs(block.Inputs) do
 				if InputData.UseVariable then
+					InputData.Value = ""
 					setVariableInput:InvokeServer(Script.Object,blockName,InputName,InputData.Variable)
 				else
+					InputData.Variable = ""
 					setValueInput:InvokeServer(Script.Object,blockName,InputName,InputData.Value)
 				end
+				print(InputName,InputData.Value,InputData.Variable)
 			end
 			for OutputName,OutputValue in pairs(block.Outputs) do
 				setOutputName:InvokeServer(Script.Object,blockName,OutputName,OutputValue)
