@@ -3,7 +3,7 @@ function functions.recurseTable(tbl,func)
 	spawn(function()
 		for index, value in pairs(tbl) do
 			if typeof(value) == "table" then
-				recurseTable(value)
+				functions.recurseTable(value,func)
 			else
 				func(index,value)
 			end
