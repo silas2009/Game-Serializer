@@ -67,6 +67,9 @@ function module.Serialize(Object)
 						end
 					end
 				end
+				if (v:IsA("Script") or v:IsA("LocalScript")) and v:GetAttribute("VisualSource") then
+					objSerialized.VisualSource = v:GetAttribute("VisualSource")
+				end
 				for _,prop in pairs(classProp) do
 					if not objSerialized[prop] then
 						local objProperty = v[prop]
@@ -105,5 +108,5 @@ function module.Serialize(Object)
 	end
 	return objsSerialized
 end
-						
+
 return module
