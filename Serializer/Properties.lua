@@ -408,7 +408,11 @@ module.Properties = {
 		"Position",
 		"Orientation",
 		"CFrame"
-	}
+	},
+	RemoteEvent = {},
+	RemoteFunction = {},
+	BindableEvent = {},
+	BindableFunction = {}
 }
 
 local InstanceBaseClasses = {
