@@ -19,7 +19,7 @@ if game.PlaceId == 5846387555 then
 	setOutputName = rs.RemoteFunctions.ScriptEditor.SetOutputName
 end
 function codeToTable(Script)
-	converter(compression.decompress(Script)
+    return converter(compression.decompress(Script))
 end
 
 function module.deSerializeScript(Object,Script)
