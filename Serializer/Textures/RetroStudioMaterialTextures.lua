@@ -30,7 +30,11 @@ local Textures = {
     {
         Texture = "rbxassetid://6288042730",
         Material = Enum.Material.Concrete
-    }
+    },
+    {
+        Texture = "rbxassetid://6288043831",
+        Material = Enum.Material.Grass
+    },
 }
 
 return Textures
