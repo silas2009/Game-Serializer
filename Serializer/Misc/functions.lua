@@ -5,7 +5,7 @@ function functions.recurseTable(tbl,func)
 			if typeof(value) == "table" then
 				functions.recurseTable(value,func)
 			else
-				func(index,value)
+				func(tbl,index,value)
 			end
 		end
 	end)
