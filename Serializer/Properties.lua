@@ -461,7 +461,8 @@ local InheritedClasses = {
 	IntValue = {"ValueBase"},
 	CornerWedge = {"BasePart"},
 	BrickColorValue = {"ValueBase"},
-	BoolValue = {"ValueBase"}
+	BoolValue = {"ValueBase"},
+	FlagStand = {"BasePart"}
 }
 
 for className,v in pairs(InheritedClasses) do
