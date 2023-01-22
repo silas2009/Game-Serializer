@@ -68,8 +68,11 @@ function module.Serialize(Object)
 					end
 				end
 				if (v:IsA("Script") or v:IsA("LocalScript")) then
-					for attributeName,attribute in pairs(v:GetAttributes()) do
-						objSerialized[attributeName] = attribute
+					if v:GetAttribute("VisualSource") then
+						objSerialized.VisualSource = v:GetAttribute("VisualSource")
+					end
+					if v:GetAttribute("VisualSource") then
+						objSerialized.IsReferenceModel = v:GetAttribute("IsReferenceModel")
 					end
 				end
 				for _,prop in pairs(classProp) do
