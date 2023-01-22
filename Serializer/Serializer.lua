@@ -67,8 +67,10 @@ function module.Serialize(Object)
 						end
 					end
 				end
-				if (v:IsA("Script") or v:IsA("LocalScript")) and v:GetAttribute("VisualSource") then
-					objSerialized.VisualSource = v:GetAttribute("VisualSource")
+				if (v:IsA("Script") or v:IsA("LocalScript")) then
+					for attributeName,attribute in pairs(v:GetAttributes()) do
+						objSerialized[attributeName] = attribute
+					end
 				end
 				for _,prop in pairs(classProp) do
 					if not objSerialized[prop] then
