@@ -71,7 +71,7 @@ function module.Serialize(Object)
 					if v:GetAttribute("VisualSource") then
 						objSerialized.VisualSource = v:GetAttribute("VisualSource")
 					end
-					if v:GetAttribute("VisualSource") then
+					if v:GetAttribute("IsReferenceModel") then
 						objSerialized.IsReferenceModel = v:GetAttribute("IsReferenceModel")
 					end
 				end
