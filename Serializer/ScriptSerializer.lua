@@ -10,13 +10,16 @@ local saveScript
 local setValueInput
 local setVariableInput
 local setOutputName
+local setValueType
 if game.PlaceId == 5846387555 then
-	createBlock = rs.RemoteFunctions.ScriptEditor.CreateBlock
-	openScript = rs.RemoteFunctions.ScriptEditor.OpenScript
-	saveScript = rs.RemoteFunctions.ScriptEditor.ScriptSaveRequested
-	setValueInput = rs.RemoteFunctions.ScriptEditor.SetValueInput
-	setVariableInput = rs.RemoteFunctions.ScriptEditor.SetVariableInput
-	setOutputName = rs.RemoteFunctions.ScriptEditor.SetOutputName
+	local remoteFunctions = rs.RemoteFunctions
+	createBlock = remoteFunctions.ScriptEditor.CreateBlock
+	openScript = remoteFunctions.ScriptEditor.OpenScript
+	saveScript = remoteFunctions.ScriptEditor.ScriptSaveRequested
+	setValueInput = remoteFunctions.ScriptEditor.SetValueInput
+	setVariableInput = remoteFunctions.ScriptEditor.SetVariableInput
+	setOutputName = remoteFunctions.ScriptEditor.SetOutputName
+	setValueType =  remoteFunctions.ScriptEditor.SetValueType
 end
 function codeToTable(Script)
 	return converter(compression.decompress(Script))
@@ -51,11 +54,10 @@ function module.deSerializeScript(Object,ScriptString)
 	for blockName,block in pairs(Script.Blocks) do
 		createBlock:InvokeServer(Script.Object,block.Type,blockName)
 		for InputName,InputData in pairs(block.Inputs) do
-			if InputData.Variable then
-				InputData.Value = ""
+			if InputData.UseVariable then
 				setVariableInput:InvokeServer(Script.Object,blockName,InputName,InputData.Variable)
 			else
-				InputData.Variable = ""
+				setValueType:InvokeServer(Script.Object,blockName,InputName,InputData.ValueType)
 				setValueInput:InvokeServer(Script.Object,blockName,InputName,InputData.Value)
 			end
 		end
