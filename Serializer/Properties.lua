@@ -412,7 +412,8 @@ module.Properties = {
 	RemoteEvent = {},
 	RemoteFunction = {},
 	BindableEvent = {},
-	BindableFunction = {}
+	BindableFunction = {},
+	Folder = {}
 }
 
 local InstanceBaseClasses = {
