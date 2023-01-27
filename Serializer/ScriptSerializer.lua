@@ -52,22 +52,19 @@ function module.deSerializeScript(Object,ScriptString)
 	openScript:InvokeServer(Script.Object)
 	setclipboard(stringify(Script.Blocks,_,false))
 	for blockName,block in pairs(Script.Blocks) do
-		spawn(function()
-			createBlock:InvokeServer(Script.Object,block.Type,blockName)
-			for InputName,InputData in pairs(block.Inputs) do
-				if InputData.UseVariable then
-					setVariableInput:InvokeServer(Script.Object,blockName,InputName,InputData.Variable)
-				else
-					setValueType:InvokeServer(Script.Object,blockName,InputName,InputData.ValueType)
-					setValueInput:InvokeServer(Script.Object,blockName,InputName,InputData.Value)
-				end
+		createBlock:InvokeServer(Script.Object,block.Type,blockName)
+		for InputName,InputData in pairs(block.Inputs) do
+			if InputData.UseVariable then
+				setVariableInput:InvokeServer(Script.Object,blockName,InputName,InputData.Variable)
+			else
+				setValueType:InvokeServer(Script.Object,blockName,InputName,InputData.ValueType)
+				setValueInput:InvokeServer(Script.Object,blockName,InputName,InputData.Value)
 			end
-			for OutputName,OutputValue in pairs(block.Outputs) do
-				setOutputName:InvokeServer(Script.Object,blockName,OutputName,OutputValue)
-			end
-		end)
+		end
+		for OutputName,OutputValue in pairs(block.Outputs) do
+			setOutputName:InvokeServer(Script.Object,blockName,OutputName,OutputValue)
+		end
 	end
-	wait(1)
 	saveScript:InvokeServer(Script)
 end
 
