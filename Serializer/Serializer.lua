@@ -8,14 +8,6 @@ local AllowedServices = {
 	"Workspace","Lighting","StarterGui","StarterPack","Debris","Teams","SoundService"
 }
 
-function FindFirstAncestorWithAttribute(Obj,Attribute)
-    if Obj:GetAttribute(Attribute) then
-        return Obj
-    end
-    repeat Obj = Obj.Parent until Obj == nil or Obj:GetAttribute(Attribute)
-    return Obj
-end
-
 local propsTable = loadstring(game:HttpGet("https://raw.githubusercontent.com/silas2009/Game-Serializer/main/Serializer/Properties.lua"))()
 local props = propsTable.Properties
 local InstanceProps = propsTable.InstanceProperties
@@ -39,7 +31,7 @@ function module.Serialize(Object)
 		objs = Object:GetDescendants()
 	end
 	for i,v in pairs(objs) do
-		if v:FindFirstAncestorOfClass("StarterGui") and not FindFirstAncestorWithAttribute(v,"RetroCreated") then
+		if v:FindFirstAncestorOfClass("StarterGui") and not v:GetAttribute("RetroCreated") then
 			objs[i] = nil
 		end
 	end
