@@ -5,7 +5,7 @@ local blacklist = {
 }
 
 local AllowedServices = {
-	"Workspace","Players","Lighting","StarterGui","StarterPack","Debris","Teams","SoundService"
+	"Workspace","Lighting","StarterGui","StarterPack","Debris","Teams","SoundService"
 }
 
 local CoreRetroGuis = {
