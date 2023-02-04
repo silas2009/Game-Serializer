@@ -105,9 +105,11 @@ function module.Serialize(Object)
 		local classProp = InstanceProps[v.ClassName]
 		if classProp then
 			for _,prop in pairs(classProp) do
-				print(prop)
 				local foundObj = table.find(objTable,realObj[prop])
 				v[prop] = {Type = "Instance", ["Instance"] = foundObj}
+				if prop == "Parent" and realObj[prop].Parent == game then
+					v[prop].Instance = realObj[prop].Name
+				end
 			end
 		end
 	end
