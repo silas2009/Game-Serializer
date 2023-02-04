@@ -16,7 +16,20 @@ local TextureSurfaces = loadstring(game:HttpGet("https://raw.githubusercontent.c
 local TextureMaterials = loadstring(game:HttpGet("https://raw.githubusercontent.com/silas2009/Game-Serializer/main/Serializer/Textures/RetroStudioMaterialTextures.lua"))()
 
 function module.Serialize(Object)
-	local objs = Object:GetDescendants()
+	local objs
+	if Object == game then
+		objs = {}
+		for i,v in pairs(AllowedServices) do
+			service = game:GetService(v)
+			if service then
+				for _,obj in pairs(service:GetDescendants()) do
+					table.insert(objs,obj)
+				end
+			end
+		end
+	else
+		objs = Object:GetDescendants()
+	end
 	local objsSerialized = {}
 	if Object.Parent ~= game then
 		table.insert(objs,Object)
