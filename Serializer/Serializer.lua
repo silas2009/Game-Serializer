@@ -93,6 +93,7 @@ function module.Serialize(Object)
 		for _,CoreRetroGui in pairs(CoreRetroGuis) do
 			if FindFirstAncestorOfClassAndName(v,CoreRetroGui.ClassName,CoreRetroGui.Name) then
 				objs[i] = nil
+				break
 			end
 		end
 	end
