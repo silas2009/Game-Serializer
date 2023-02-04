@@ -1,9 +1,11 @@
 local module = {}
 
 local blacklist = {
-	"Terrain",
-	"Camera",
-	"TouchTransmitter"
+	"Terrain","Camera","TouchTransmitter"
+}
+
+local AllowedServices = {
+	"Workspace","Players","Lighting","StarterGui","StarterPack","Debris","Teams","SoundService"
 }
 
 local propsTable = loadstring(game:HttpGet("https://raw.githubusercontent.com/silas2009/Game-Serializer/main/Serializer/Properties.lua"))()
@@ -107,7 +109,7 @@ function module.Serialize(Object)
 			for _,prop in pairs(classProp) do
 				local foundObj = table.find(objTable,realObj[prop])
 				v[prop] = {Type = "Instance", ["Instance"] = foundObj}
-				if prop == "Parent" and realObj[prop].Parent == game then
+				if prop == "Parent" and realObj[prop].Parent == game and table.find(AllowedServices,realObj[prop].ClassName) then
 					v[prop].Instance = realObj[prop].Name
 				end
 			end
