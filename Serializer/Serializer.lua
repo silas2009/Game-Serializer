@@ -40,7 +40,7 @@ function module.Serialize(Object)
 	end
 	local shift = 0
 	for i,v in pairs(objs) do
-		if v:FindFirstAncestorOfClass("StarterGui") and FindFirstAncestorWithAttribute(v,"RetroCreated") then
+		if v:FindFirstAncestorOfClass("StarterGui") and not FindFirstAncestorWithAttribute(v,"RetroCreated") then
 			table.remove(objs,i-shift)
 			shift += 1
 		end
