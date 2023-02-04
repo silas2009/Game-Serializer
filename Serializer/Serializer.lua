@@ -32,6 +32,7 @@ function module.Serialize(Object)
 	end
 	for i,v in pairs(objs) do
 		if v:FindFirstAncestorOfClass("StarterGui") and not v:GetAttribute("RetroCreated") then
+			print(v)
 			objs[i] = nil
 		end
 	end
