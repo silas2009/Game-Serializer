@@ -30,12 +30,6 @@ function module.Serialize(Object)
 	else
 		objs = Object:GetDescendants()
 	end
-	for i,v in pairs(objs) do
-		if v:FindFirstAncestorOfClass("StarterGui") and not v:GetAttribute("RetroCreated") then
-			print(v)
-			objs[i] = nil
-		end
-	end
 	local objsSerialized = {}
 	if Object ~= game and Object.Parent ~= game then
 		table.insert(objs,Object)
@@ -65,7 +59,7 @@ function module.Serialize(Object)
 		end
 	end
 	for _,v in ipairs(objs) do
-		if not table.find(blacklist,v.ClassName) and not table.find(fakeSurfaces,v) then
+		if not table.find(blacklist,v.ClassName) and not table.find(fakeSurfaces,v) and (v:FindFirstAncestorOfClass("StarterGui") and not v:GetAttribute("RetroCreated")) then
 			local objSerialized = {}
 			local classProp = props[v.ClassName]
 			if classProp then
