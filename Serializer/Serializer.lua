@@ -38,11 +38,13 @@ function module.Serialize(Object)
 	else
 		objs = Object:GetDescendants()
 	end
-	--[[for i,v in pairs(objs) do
+	local shift = 0
+	for i,v in pairs(objs) do
 		if v:FindFirstAncestorOfClass("StarterGui") and FindFirstAncestorWithAttribute(v,"RetroCreated") then
-			objs[i] = nil
+			table.remove(objs,i-shift)
+			shift += 1
 		end
-	end--]]
+	end
 	local objsSerialized = {}
 	if Object ~= game and Object.Parent ~= game then
 		table.insert(objs,Object)
