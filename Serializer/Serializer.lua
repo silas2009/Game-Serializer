@@ -38,11 +38,9 @@ function module.Serialize(Object)
 	else
 		objs = Object:GetDescendants()
 	end
-	local shift = 0
 	for i,v in pairs(objs) do
 		if v:FindFirstAncestorOfClass("StarterGui") and not FindFirstAncestorWithAttribute(v,"RetroCreated") then
-			table.remove(objs,i-shift)
-			shift += 1
+			objs[i] = nil
 		end
 	end
 	local objsSerialized = {}
