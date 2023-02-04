@@ -10,7 +10,7 @@ local AllowedServices = {
 
 local CoreRetroGuis = {
     {
-        Name = "Notifications",
+        Name = "Notification",
         ClassName = "ScreenGui"
     },
     {
