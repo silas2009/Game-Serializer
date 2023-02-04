@@ -8,62 +8,11 @@ local AllowedServices = {
 	"Workspace","Lighting","StarterGui","StarterPack","Debris","Teams","SoundService"
 }
 
-local CoreRetroGuis = {
-    {
-        Name = "Notification",
-        ClassName = "ScreenGui"
-    },
-    {
-        Name = "BlueSpeedBar",
-        ClassName = "ScreenGui"
-    },
-    {
-        Name = "Cursor",
-        ClassName = "ScreenGui"
-    },
-    {
-        Name = "GuiRoot",
-        ClassName = "ScreenGui"
-    },
-    {
-        Name = "Message",
-        ClassName = "ScreenGui"
-    },
-    {
-        Name = "RETROBLOXDeveloperInfo",
-        ClassName = "ScreenGui"
-    },
-    {
-        Name = "ROBLOXMobileEngineGUI",
-        ClassName = "ScreenGui"
-    },
-    {
-        Name = "Report2009",
-        ClassName = "ScreenGui"
-    },
-    {
-        Name = "Early2009Sky",
-        ClassName = "BillboardGui"
-    },
-    {
-        Name = "Scripts",
-        ClassName = "Configuration"
-    },
-    {
-        Name = "Modules",
-        ClassName = "Configuration"
-    },
-    {
-        Name = "Cmdr",
-        ClassName = "ScreenGui"
-    }
-}
-
-function FindFirstAncestorOfClassAndName(Obj,ClassName,Name)
-    if Obj.ClassName == ClassName and Obj.Name == Name then
+function FindFirstAncestorWithAttribute(Obj,Attribute)
+    if Obj:GetAttribute(Attribute) then
         return Obj
     end
-    repeat Obj = Obj.Parent until Obj == nil or (Obj.ClassName == ClassName and Obj.Name == Name)
+    repeat Obj = Obj.Parent until Obj == nil or Obj:GetAttribute(Attribute)
     return Obj
 end
 
@@ -90,11 +39,8 @@ function module.Serialize(Object)
 		objs = Object:GetDescendants()
 	end
 	for i,v in pairs(objs) do
-		for _,CoreRetroGui in pairs(CoreRetroGuis) do
-			if FindFirstAncestorOfClassAndName(v,CoreRetroGui.ClassName,CoreRetroGui.Name) then
-				objs[i] = nil
-				break
-			end
+		if v:FindFirstAncestorOfClass("StarterGui") and FindFirstAncestorWithAttribute(v,"RetroCreated") then
+			objs[i] = nil
 		end
 	end
 	local objsSerialized = {}
