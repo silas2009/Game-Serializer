@@ -8,6 +8,65 @@ local AllowedServices = {
 	"Workspace","Players","Lighting","StarterGui","StarterPack","Debris","Teams","SoundService"
 }
 
+local CoreRetroGuis = {
+    {
+        Name = "Notifications",
+        ClassName = "ScreenGui"
+    },
+    {
+        Name = "BlueSpeedBar",
+        ClassName = "ScreenGui"
+    }
+    {
+        Name = "Cursor",
+        ClassName = "ScreenGui"
+    }
+    {
+        Name = "GuiRoot",
+        ClassName = "ScreenGui"
+    }
+    {
+        Name = "Message",
+        ClassName = "ScreenGui"
+    }
+    {
+        Name = "RETROBLOXDeveloperInfo",
+        ClassName = "ScreenGui"
+    }
+    {
+        Name = "ROBLOXMobileEngineGUI",
+        ClassName = "ScreenGui"
+    },
+    {
+        Name = "Report2009",
+        ClassName = "ScreenGui"
+    },
+    {
+        Name = "Early2009Sky",
+        ClassName = "BillboardGui"
+    },
+    {
+        Name = "Scripts",
+        ClassName = "Configuration"
+    },
+    {
+        Name = "Modules",
+        ClassName = "Configuration"
+    },
+    {
+        Name = "Cmdr",
+        ClassName = "ScreenGui"
+    }
+}
+
+function FindFirstAncestorOfClassAndName(Obj,ClassName,Name)
+    if Obj.ClassName == ClassName and Obj.Name == Name then
+        return Obj
+    end
+    repeat Obj = Obj.Parent until Obj == nil or (Obj.ClassName == ClassName and Obj.Name == Name)
+    return Obj
+end
+
 local propsTable = loadstring(game:HttpGet("https://raw.githubusercontent.com/silas2009/Game-Serializer/main/Serializer/Properties.lua"))()
 local props = propsTable.Properties
 local InstanceProps = propsTable.InstanceProperties
@@ -29,6 +88,13 @@ function module.Serialize(Object)
 		end
 	else
 		objs = Object:GetDescendants()
+	end
+	for i,v in pairs(objs) do
+		for _,CoreRetroGui in pairs(CoreRetroGuis) do
+			if FindFirstAncestorOfClassAndName(v,CoreRetroGui.ClassName,CoreRetroGui.Name) then
+				objs[i] = nil
+			end
+		end
 	end
 	local objsSerialized = {}
 	if Object.Parent ~= game then
