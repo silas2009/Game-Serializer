@@ -60,7 +60,7 @@ function module.Serialize(Object)
 	end
 	local blackListedObjs = {}
 	for _,v in pairs(objs) do
-		if (v:FindFirstAncestorOfClass("StarterGui") and not v:GetAttribute("RetroCreated")) then
+		if not v:GetAttribute("VisualSource") and (v:FindFirstAncestorOfClass("StarterGui") and not v:GetAttribute("RetroCreated")) then
 			table.insert(blackListedObjs,v)
 		end
 	end
