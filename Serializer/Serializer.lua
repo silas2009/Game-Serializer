@@ -63,6 +63,9 @@ function module.Serialize(Object)
 		if not v:GetAttribute("VisualSource") and (v:FindFirstAncestorOfClass("StarterGui") and not v:GetAttribute("RetroCreated")) then
 			table.insert(blackListedObjs,v)
 		end
+		if v:FindFirstAncestorOfClass("ReplicatedStorage") and v:IsA("ModuleScript") then
+			table.insert(blackListedObjs,v)
+		end
 	end
 	for _,v in ipairs(objs) do
 		if not table.find(blacklist,v.ClassName) and not table.find(fakeSurfaces,v) and not table.find(blackListedObjs,v) then
