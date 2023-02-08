@@ -5,7 +5,7 @@ local blacklist = {
 }
 
 local AllowedServices = {
-	"Workspace","Lighting","StarterGui","StarterPack","Debris","Teams","SoundService","ReplicatedStorage"
+	"Workspace","Lighting","StarterGui","StarterPack","Debris","Teams","SoundService"
 }
 
 local propsTable = loadstring(game:HttpGet("https://raw.githubusercontent.com/silas2009/Game-Serializer/main/Serializer/Properties.lua"))()
@@ -30,7 +30,10 @@ function module.Serialize(Object)
 	else
 		objs = Object:GetDescendants()
 	end
-	local objsSerialized = {}
+	local objsSerialized = {isGame = false}
+	if Object == game then
+		objsSerialized.isGame = true
+	end
 	if Object ~= game and Object.Parent ~= game then
 		table.insert(objs,Object)
 	end
