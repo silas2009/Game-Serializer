@@ -5,7 +5,7 @@ local blacklist = {
 }
 
 local AllowedServices = {
-	"Workspace","Lighting","StarterGui","StarterPack","Debris","Teams","SoundService"
+	"Workspace","Lighting","StarterGui","StarterPack","Debris","Teams","SoundService","ReplicatedStorage"
 }
 
 local propsTable = loadstring(game:HttpGet("https://raw.githubusercontent.com/silas2009/Game-Serializer/main/Serializer/Properties.lua"))()
