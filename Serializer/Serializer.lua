@@ -136,7 +136,7 @@ function module.Serialize(Object)
 			end
 		end
 	end
-	return objsSerialized,SerializedServices
+	return {["SerializedObjects"] = objsSerialized,["SerializedServices"] = SerializedServices}
 end
 
 return module
