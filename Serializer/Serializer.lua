@@ -30,13 +30,8 @@ function module.Serialize(Object)
 	else
 		objs = Object:GetDescendants()
 	end
-	local objsSerialized = {isGame = false}
-	if Object == game then
-		objsSerialized.isGame = true
-	end
-	if Object ~= game and Object.Parent ~= game then
-		table.insert(objs,Object)
-	end
+	local objsSerialized = {}
+	local SerializedServices = {}
 	local objTable = {}
 	local fakeSurfaces = {}
 	local partsWithSurfaces = {}
@@ -135,12 +130,13 @@ function module.Serialize(Object)
 				local foundObj = table.find(objTable,realObj[prop])
 				v[prop] = {Type = "Instance", ["Instance"] = foundObj}
 				if prop == "Parent" and realObj[prop].Parent == game and table.find(AllowedServices,realObj[prop].ClassName) then
+					table.insert(SerializedServices,realObj[prop].ClassName)
 					v[prop].Instance = realObj[prop].Name
 				end
 			end
 		end
 	end
-	return objsSerialized
+	return objsSerialized,SerializedServices
 end
 
 return module
