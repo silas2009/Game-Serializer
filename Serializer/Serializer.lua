@@ -5,7 +5,7 @@ local blacklist = {
 }
 
 local AllowedServices = {
-	"Workspace","Lighting","StarterGui","StarterPack","Debris","Teams","SoundService","ReplicatedStorage"
+	"Workspace","Lighting","StarterGui","StarterPack","Teams","SoundService"
 }
 
 local propsTable = loadstring(game:HttpGet("https://raw.githubusercontent.com/silas2009/Game-Serializer/main/Serializer/Properties.lua"))()
@@ -31,7 +31,9 @@ function module.Serialize(Object)
 		objs = Object:GetDescendants()
 	end
 	local objsSerialized = {}
-	local SerializedServices = {}
+	if Object ~= game and Object.Parent ~= game then
+		table.insert(objs,Object)
+	end
 	local objTable = {}
 	local fakeSurfaces = {}
 	local partsWithSurfaces = {}
@@ -59,9 +61,6 @@ function module.Serialize(Object)
 	local blackListedObjs = {}
 	for _,v in pairs(objs) do
 		if not v:GetAttribute("VisualSource") and (v:FindFirstAncestorOfClass("StarterGui") and not v:GetAttribute("RetroCreated")) then
-			table.insert(blackListedObjs,v)
-		end
-		if v:FindFirstAncestorOfClass("ReplicatedStorage") and v:IsA("ModuleScript") then
 			table.insert(blackListedObjs,v)
 		end
 	end
@@ -130,15 +129,12 @@ function module.Serialize(Object)
 				local foundObj = table.find(objTable,realObj[prop])
 				v[prop] = {Type = "Instance", ["Instance"] = foundObj}
 				if prop == "Parent" and realObj[prop].Parent == game and table.find(AllowedServices,realObj[prop].ClassName) then
-					if not table.find(SerializedServices,realObj[prop].ClassName) then
-						table.insert(SerializedServices,realObj[prop].ClassName)
-					end
 					v[prop].Instance = realObj[prop].Name
 				end
 			end
 		end
 	end
-	return {["SerializedObjects"] = objsSerialized,["SerializedServices"] = SerializedServices}
+	return objsSerialized
 end
 
 return module
