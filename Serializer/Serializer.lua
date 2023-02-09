@@ -130,7 +130,9 @@ function module.Serialize(Object)
 				local foundObj = table.find(objTable,realObj[prop])
 				v[prop] = {Type = "Instance", ["Instance"] = foundObj}
 				if prop == "Parent" and realObj[prop].Parent == game and table.find(AllowedServices,realObj[prop].ClassName) then
-					table.insert(SerializedServices,realObj[prop].ClassName)
+					if not table.find(SerializedServices,realObj[prop].ClassName) then
+						table.insert(SerializedServices,realObj[prop].ClassName)
+					end
 					v[prop].Instance = realObj[prop].Name
 				end
 			end
