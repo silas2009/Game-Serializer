@@ -99,6 +99,11 @@ module.Properties = {
 		"ImageColor3",
 		"ImageTransparency"
 	},
+	ImageButton = {
+		"Image",
+		"ImageColor3",
+		"ImageTransparency"
+	},
 	SurfaceGui = {
 		"AlwaysOnTop",
 		"CanvasSize",
