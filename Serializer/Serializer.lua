@@ -15,6 +15,18 @@ local SerializeValues = loadstring(game:HttpGet("https://raw.githubusercontent.c
 local TextureSurfaces = loadstring(game:HttpGet("https://raw.githubusercontent.com/silas2009/Game-Serializer/main/Serializer/Textures/RetroStudioSurfaceTextures.lua"))()
 local TextureMaterials = loadstring(game:HttpGet("https://raw.githubusercontent.com/silas2009/Game-Serializer/main/Serializer/Textures/RetroStudioMaterialTextures.lua"))()
 
+function convertId(assetId)
+    local starts = {
+        "http://www.roblox.com/asset?id="
+    }
+    for i,v in pairs(starts) do
+        if string.sub(assetId,0,#v) == v then
+            return "rbxassetid://" .. string.sub(assetId,#v+1,#assetId)
+        end
+    end
+    return assetId
+end
+
 function module.Serialize(Object)
 	local objs
 	if Object == game then
@@ -110,8 +122,8 @@ function module.Serialize(Object)
 						else
 							objSerialized[prop] = objProperty
 						end
-						if typeof(objSerialized[prop]) == "string" and objSerialized[prop]:sub(1,32) == "http://www.roblox.com/asset/?id=" then
-							objSerialized[prop] = "rbxassetid://" .. string.sub(objSerialized[prop],33,string.len(objSerialized[prop]))
+						if typeof(objSerialized[prop]) == "string" then
+							objSerialized[prop] = convertId(objSerialized[prop])
 						end
 					end
 				end
@@ -134,6 +146,7 @@ function module.Serialize(Object)
 			end
 		end
 	end
+	
 	return objsSerialized
 end
 
