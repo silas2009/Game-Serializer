@@ -13,7 +13,8 @@ local BaseClasses = {
 		"ZIndex",
 		"BorderColor3",
 		"ClipsDescendants",
-		"SizeConstraint"
+		"SizeConstraint",
+		"Rotation"
 	},
 	GuiButton = {
 		"AutoButtonColor",
@@ -92,6 +93,11 @@ module.Properties = {
 		"TextWrapped",
 		"TextXAlignment",
 		"TextYAlignment"
+	},
+	ImageLabel = {
+		"Image",
+		"ImageColor3",
+		"ImageTransparency"
 	},
 	SurfaceGui = {
 		"AlwaysOnTop",
