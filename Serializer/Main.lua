@@ -748,7 +748,7 @@ end
 function createObj(ClassName,Parent)
 	if ClassName == "Part" then
 		local part = InsertToolbox:InvokeServer("Brick","Models","Building",Vector3.zero)[1]
-		if Parent then ChangeProperty:FireServer(part,"Parent",Parent) end
+		spawn(function() if Parent then ChangeProperty:FireServer(part,"Parent",Parent) end end)
 		return part,false
 	else
 		local v1,v2 = getCode()
