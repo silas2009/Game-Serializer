@@ -4,7 +4,7 @@ if hashlib then
 end
 function getCode()
 	local clock = os.clock()
-	return hashlib.md5(("%*\224\182\158"):format(clock)),clock
+	return hashlib.md5(("\224\182\158%*\224\182\158"):format(clock)),clock
 end
 
 local ts = game:GetService("TweenService")
@@ -541,7 +541,7 @@ function explorer()
 	local function update(obj)
 		if obj.Parent == currentPath then
 			local button = createButtonTemplate()
-            button.Icon.ImageRectOffset = classIcons[obj.ClassName] or classIcons.Nil
+			button.Icon.ImageRectOffset = classIcons[obj.ClassName] or classIcons.Nil
 			button.MouseButton1Down:Connect(function()
 				button.BackgroundColor3 = colors.Click.Color
 				button.InstanceName.TextColor3 = colors.Click.Text
@@ -759,7 +759,7 @@ function deSerialize(objsSerialized)
 	SerializeInProgress = true
 	local objsSerializedSize = #objsSerialized
 	local times = 0
-	spawn(function()
+	--[[spawn(function()
 		if Explorer then
 			Explorer.ExplorerScript.Enabled = false
 			for _,v in pairs(Explorer.ListOutline.Explorer:GetChildren()) do
@@ -768,7 +768,7 @@ function deSerialize(objsSerialized)
 				end
 			end
 		end
-	end)
+	end)--]]
 	for i,v in ipairs(objsSerialized) do
 		if v.ClassName == "Script" or v.ClassName == "LocalScript" then
 			local referenceModel = v.IsReferenceModel
@@ -821,8 +821,9 @@ function deSerialize(objsSerialized)
 
 			v.Serialized = true
 			v.Instance = obj
-            insertButton.Text = ("Building %s/%s"):format(i,objsSerializedSize)
+			insertButton.Text = ("Building %s/%s"):format(i,objsSerializedSize)
 		end)
+		task.wait(0.1)
 	end
 	spawn(function()
 		repeat wait() until done
@@ -865,6 +866,7 @@ function deSerialize(objsSerialized)
 							if propName == "VisualSource" then
 								spawn(function()
 									deSerializeScript.deSerializeScript(realObj,v.VisualSource)
+									print("Finished " .. v.ClassName .. ": " .. v.Name)
 								end)
 							end
 						end
@@ -878,18 +880,18 @@ function deSerialize(objsSerialized)
 								end
 							end)
 							if pcall(function()return realObj[propName]end) then
-                                if (typeof(realObj[propName]) == "string" and SetProp ~= realObj[propName]) or typeof(realObj[propName]) ~= "string" then
-                                    ChangeProperty:FireServer(realObj,propName,SetProp)
-                                    if typeof(realObj[propName]) == "string" then
-                                        task.wait()
-                                    end
-                                end
-                            end
+								if (typeof(realObj[propName]) == "string" and SetProp ~= realObj[propName]) or typeof(realObj[propName]) ~= "string" then
+									ChangeProperty:FireServer(realObj,propName,SetProp)
+									if typeof(realObj[propName]) == "string" then
+										task.wait()
+									end
+								end
+							end
 						end
 					end
 				end
-                task.wait()
-                insertButton.Text = ("Properties %s/%s"):format(i,#objsSerialized)
+				task.wait()
+				insertButton.Text = ("Properties %s/%s"):format(i,#objsSerialized)
 			end
 		end
 		ChangeProperty:FireServer(ExportFolder,"Parent",workspace)
@@ -901,12 +903,12 @@ function deSerialize(objsSerialized)
 			end
 		end
 		-- remoteEvents.MiscObjectInteraction:FireServer(unusedServices,"Destroy")
-		if Explorer then
+		--[[if Explorer then
 			Explorer.ExplorerScript.ItemTemplate.Parent = Explorer.ListOutline.Explorer
 			Explorer.ExplorerScript.Enabled = true
-			insertButton.Text = "Insert"
-			insertButton.BackgroundColor3 = insertOgColor
-		end
+		end--]]
+		insertButton.Text = "Insert"
+		insertButton.BackgroundColor3 = insertOgColor
 		SerializeInProgress	= false
 	end)
 end
