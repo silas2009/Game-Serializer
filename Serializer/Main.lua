@@ -767,16 +767,11 @@ function deSerialize(objsSerialized)
 	SerializeInProgress = true
 	local objsSerializedSize = #objsSerialized
 	local times = 0
-	--[[spawn(function()
-		if Explorer then
-			Explorer.ExplorerScript.Enabled = false
-			for _,v in pairs(Explorer.ListOutline.Explorer:GetChildren()) do
-				if v:IsA("GuiObject") then
-					v:Destroy()
-				end
-			end
-		end
-	end)--]]
+	
+	if game:GetService("Players").LocalPlayer:FindFirstChildOfClass("PlayerGui"):FindFirstChild("StudioGui") then -- Disable Studio Gui
+		game:GetService("Players").LocalPlayer:FindFirstChildOfClass("PlayerGui"):FindFirstChild("StudioGui"):Destroy()
+	end
+	
 	for i,v in ipairs(objsSerialized) do
 		if v.ClassName == "Script" or v.ClassName == "LocalScript" then
 			local referenceModel = v.IsReferenceModel
@@ -911,10 +906,9 @@ function deSerialize(objsSerialized)
 			end
 		end
 		-- remoteEvents.MiscObjectInteraction:FireServer(unusedServices,"Destroy")
-		--[[if Explorer then
-			Explorer.ExplorerScript.ItemTemplate.Parent = Explorer.ListOutline.Explorer
-			Explorer.ExplorerScript.Enabled = true
-		end--]]
+		if not game:GetService("Players").LocalPlayer:FindFirstChildOfClass("PlayerGui"):FindFirstChild("StudioGui") then -- Enable Studio Gui
+			game:GetService("StarterGui"):WaitForChild("StudioGui"):Clone().Parent = game:GetService("Players").LocalPlayer:FindFirstChildOfClass("PlayerGui")
+		end
 		insertButton.Text = "Insert"
 		insertButton.BackgroundColor3 = insertOgColor
 		SerializeInProgress	= false
