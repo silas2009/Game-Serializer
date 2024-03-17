@@ -738,14 +738,22 @@ local remoteFunctions = game:GetService("ReplicatedStorage"):FindFirstChild("Rem
 local remoteEvents = game:GetService("ReplicatedStorage"):FindFirstChild("RemoteEvents")
 local CreateObject
 local ChangeProperty
+local InsertToolbox
 if remoteFunctions then
 	CreateObject = remoteFunctions:FindFirstChild("CreateObject")
 	ChangeProperty = remoteEvents:FindFirstChild("ObjectPropertyChangeRequested")
+	InsertToolbox = remoteFunctions:FindFirstChild("InsertContent")
 end
 
 function createObj(ClassName,Parent)
-	local v1,v2 = getCode()
-	return CreateObject:InvokeServer(ClassName,Parent,v1,v2)
+	if ClassName == "Part" then
+		local part = InsertToolbox:InvokeServer("Brick","Models","Building",Vector3.zero)[1]
+		if Parent then ChangeProperty:FireServer(part,"Parent",Parent) end
+		return part,false
+	else
+		local v1,v2 = getCode()
+		return CreateObject:InvokeServer(ClassName,Parent,v1,v2),true
+	end
 end
 
 local insertButton = gui.Main.Container.Bottom.Insert
@@ -808,22 +816,22 @@ function deSerialize(objsSerialized)
 	end
 	repeat task.wait() until UnparentedFolder
 	for i,v in ipairs(objsSerialized) do
-		spawn(function()
-			local obj
-			obj = createObj(v.ClassName,UnparentedFolder)
-			if i == objsSerializedSize then
-				done = true
-			end
-			if not obj then
-				v.Serialized = false
-				return
-			end
+		local obj,waiting = createObj(v.ClassName,UnparentedFolder)
 
+		if i == objsSerializedSize then
+			done = true
+		end
+		if obj then
 			v.Serialized = true
 			v.Instance = obj
-			insertButton.Text = ("Building %s/%s"):format(i,objsSerializedSize)
-		end)
-		task.wait(0.1)
+		else
+			v.Serialized = false
+		end
+		insertButton.Text = ("Building %s/%s"):format(i,objsSerializedSize)
+		
+		if waiting then
+			task.wait(0.05)
+		end
 	end
 	spawn(function()
 		repeat wait() until done
