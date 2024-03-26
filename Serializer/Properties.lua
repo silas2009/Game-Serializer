@@ -43,7 +43,8 @@ local BaseClasses = {
 		"FrontSurface",
 		"LeftSurface",
 		"RightSurface",
-		"TopSurface"
+		"TopSurface",
+		"CFrame"
 	},
 	ValueBase = {"Value"},
 	["Instance"] = {"Archivable","Name","ClassName"}
@@ -104,6 +105,20 @@ module.Properties = {
 		"ImageColor3",
 		"ImageTransparency"
 	},
+	ScrollingFrame = {
+		"BottomImage",
+		"CanvasPosition",
+		"CanvasSize",
+		"MidImage",
+		"ScrollBarImageColor3",
+		"ScrollBarImageTransparency",
+		"ScrollBarThickness",
+		"ScrollingDirection",
+		"ScrollingEnabled",
+		"TopImage",
+		"VerticalScrollBarInset",
+		"VerticalScrollBarPosition"
+	},
 	SurfaceGui = {
 		"AlwaysOnTop",
 		"CanvasSize",
@@ -122,6 +137,13 @@ module.Properties = {
 		"StudsOffset"
 	},
 	Part = {"Shape"},
+	Meshpart = {
+		"DoubleSided",
+		"MeshId",
+		"TextureId",
+		"RenderFidelity",
+		"CollisionFidelity",
+	},
 	VehicleSeat = {
 		"Disabled",
 		"HeadsUpDisplay",
