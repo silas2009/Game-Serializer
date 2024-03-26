@@ -28,6 +28,7 @@ function convertId(assetId)
 end
 
 function module.Serialize(Object)
+	local defaultProperties = {}
 	local objs
 	if Object == game then
 		objs = {}
@@ -110,7 +111,21 @@ function module.Serialize(Object)
 				end
 				for _,prop in pairs(classProp) do
 					if not objSerialized[prop] then
+						local defaultValue = defaultProperties[v.ClassName]
+						if not defaultValue then
+							local success,defaultinst = pcall(function()
+								return Instance.new(v.ClassName)
+							end)
+							if success then
+								defaultProperties[v.ClassName] = defaultinst
+								defaultValue = defaultinst
+							end
+						end
+						defaultValue = defaultValue and defaultValue[prop]
 						local objProperty = v[prop]
+						if prop ~= "ClassName" and objProperty == defaultValue then
+							continue
+						end
 						if v:IsA("BasePart") and prop == "Anchored" then
 							if v:GetAttribute("Anchored") ~= nil then
 								objProperty = v:GetAttribute("Anchored")
