@@ -1,26 +1,26 @@
 local Serialize = {}
-function Serialize.Vector3(Value:Vector3)
-	return {Type = typeof(Value),X = Value.X, Y = Value.Y, Z = Value.Z}
+function Serialize.Vector3(Value)
+	return {Type = "Vector3",X = Value.X, Y = Value.Y, Z = Value.Z}
 end
-function Serialize.Vector2(Value:Vector2)
-	return {Type = typeof(Value),X = Value.X, Y = Value.Y}
+function Serialize.Vector2(Value)
+	return {Type = "Vector2",X = Value.X, Y = Value.Y}
 end
-function Serialize.EnumItem(Value:EnumItem)
-	return {Type = typeof(Value),Name=Value.Name,EnumType=tostring(Value.EnumType)}
+function Serialize.EnumItem(Value)
+	return {Type = "EnumItem",Name=Value.Name,EnumType=tostring(Value.EnumType)}
 end
-function Serialize.Color3(Value:Color3)
-	return {Type = typeof(Value),R = Value.R, G = Value.G, B = Value.B}
+function Serialize.Color3(Value)
+	return {Type = "Color3",R = Value.R, G = Value.G, B = Value.B}
 end
-function Serialize.BrickColor(Value:BrickColor)
-	return {Type = typeof(Value),Name = Value.Name}
+function Serialize.BrickColor(Value)
+	return {Type = "BrickColor",Name = Value.Name}
 end
-function Serialize.CFrame(Value:CFrame)
+function Serialize.CFrame(Value)
 	local x, y, z, r0, r1, r2, r10, r11, r12, r20, r21, r22 = Value:components()
-	return {Type = typeof(Value),x=x,y=y,z=z,r0=r0,r1=r1,r2=r2,r10=r10,r11=r11,r12=r12,r20=r20,r21=r21,r22=r22}
+	return {Type = "CFrame",x=x,y=y,z=z,r0=r0,r1=r1,r2=r2,r10=r10,r11=r11,r12=r12,r20=r20,r21=r21,r22=r22}
 end
-function Serialize.UDim2(Value:UDim2)
+function Serialize.UDim2(Value)
 	return {
-		Type = typeof(Value),
+		Type = "UDim2",
 		X = {
 			Offset = Value.X.Offset,
 			Scale = Value.X.Scale
@@ -31,9 +31,9 @@ function Serialize.UDim2(Value:UDim2)
 		}
 	}
 end
-function Serialize.UDim(Value:UDim)
+function Serialize.UDim(Value)
 	return {
-		Type = typeof(Value),
+		Type = "UDim",
 		Offset = Value.Offset,
 		Scale = Value.Scale
 	}
