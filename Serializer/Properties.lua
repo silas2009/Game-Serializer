@@ -226,6 +226,7 @@ module.Properties = {
 		"Rotation",
 		"RotSpeed",
 		"Speed",
+		"VelocitySpread",
 		"SpreadAngle",
 		"Shape",
 		"ShapeInOut",
