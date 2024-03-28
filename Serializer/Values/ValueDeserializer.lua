@@ -24,5 +24,18 @@ end
 function Deserialize.UDim(Value)
 	return UDim.new(Value.Scale,Value.Offset)
 end
+function Deserialize.NumberRange(Value)
+	return NumberRange.new(Value.Min,Value.Max)
+end
+function Deserialize.ColorSequenceKeypoint(Value)
+	return ColorSequenceKeypoint.new(Value.Time, Deserialize.Color3(Value.Value))
+end
+function Deserialize.ColorSequence(Value)
+	local keypoints = {}
+	for i,v in ipairs(Value.Keypoints) do
+		table.insert(keypoints,Deserialize.ColorSequenceKeypoint(v))
+	end
+	return ColorSequence.new(keypoints)
+end
 
 return Deserialize
