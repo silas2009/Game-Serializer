@@ -552,14 +552,12 @@ function explorer()
 				obj:GetPropertyChangedSignal("Name"):Connect(function()
 					button.InstanceName.Text = obj.Name
 				end)
-				if #obj:GetChildren() > 0 then
-					clearGuis(objects)
-					currentPath = obj
-					for i,v in pairs(currentPath:GetChildren()) do
-						update(v)
-					end
-					updatePathGui()
+				clearGuis(objects)
+				currentPath = obj
+				for i,v in pairs(currentPath:GetChildren()) do
+					update(v)
 				end
+				updatePathGui()
 			end)
 			button.MouseEnter:Connect(function()
 				button.BackgroundColor3 = colors.Hover.Color
@@ -616,6 +614,17 @@ function explorer()
 		update(v)
 	end
 	updatePathGui()
+	local mouse = game.Players.LocalPlayer:GetMouse()
+	mouse.Button1Down:Connect(function()
+		if mouse.Target then
+			currentPath = mouse.Target
+			clearGuis(objects)
+			for i,v in pairs(currentPath:GetChildren()) do
+				update(v)
+			end
+			updatePathGui()
+		end
+	end)
 end
 
 local listLayout = objects:FindFirstChildOfClass("UIListLayout")
@@ -767,11 +776,11 @@ function deSerialize(objsSerialized)
 	SerializeInProgress = true
 	local objsSerializedSize = #objsSerialized
 	local times = 0
-	
+
 	if game:GetService("Players").LocalPlayer:FindFirstChildOfClass("PlayerGui"):FindFirstChild("StudioGui") then -- Disable Studio Gui
 		game:GetService("Players").LocalPlayer:FindFirstChildOfClass("PlayerGui"):FindFirstChild("StudioGui"):Destroy()
 	end
-	
+
 	for i,v in ipairs(objsSerialized) do
 		if v.ClassName == "Script" or v.ClassName == "LocalScript" then
 			local referenceModel = v.IsReferenceModel
@@ -823,7 +832,7 @@ function deSerialize(objsSerialized)
 			v.Serialized = false
 		end
 		insertButton.Text = ("Building %s/%s"):format(i,objsSerializedSize)
-		
+
 		if waiting then
 			task.wait(0.05)
 		end
@@ -954,8 +963,10 @@ serializeButton.MouseButton1Click:Connect(function()
 	local ogColor = serializeButton.BackgroundColor3
 	serializeButton.Text = "Serializing..."
 	serializeButton.BackgroundColor3 = Color3.new(ogColor.R/2,ogColor.G/2,ogColor.B/2)
+	local serialized = game:GetService("HttpService"):JSONEncode(serializerFunction.Serialize(currentPath))
 	task.wait(0.5)
-	writefile("Serialize/" .. filename .. ".json",game:GetService("HttpService"):JSONEncode(serializerFunction.Serialize(currentPath)))
+	setclipboard(serialized)
+	writefile("Serialize/" .. filename .. ".json",serialized)
 	task.wait()
 	serializeButton.Text = "Serialize"
 	serializeButton.BackgroundColor3 = ogColor
