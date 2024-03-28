@@ -38,5 +38,29 @@ function Serialize.UDim(Value)
 		Scale = Value.Scale
 	}
 end
+function Serialize.NumberRange(Value)
+	return {
+		Type = "NumberRange",
+		Min = Value.Min,
+		Max = Value.Max
+	}
+end
+function Serialize.ColorSequenceKeypoint(Value)
+	return {
+		Type = "ColorSequenceKeypoint",
+		Value = Serialize.Color3(Value.Value),
+		Time = Value.Time
+	}
+end
+function Serialize.ColorSequence(Value)
+	local Keypoints = {}
+	for _,Keypoint in ipairs(Value.Keypoints) do
+		table.insert(Keypoints,Serialize.ColorSequenceKeypoint(Keypoint))
+	end
+	return {
+		Type = "ColorSequence",
+		Keypoints = Keypoints
+	}
+end
 
 return Serialize
