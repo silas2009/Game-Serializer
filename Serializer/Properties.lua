@@ -44,7 +44,8 @@ local BaseClasses = {
 		"LeftSurface",
 		"RightSurface",
 		"TopSurface",
-		"CFrame"
+		"CFrame",
+		"Color"
 	},
 	ValueBase = {"Value"},
 	["Instance"] = {"Archivable","Name","ClassName"}
