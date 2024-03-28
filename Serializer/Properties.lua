@@ -138,6 +138,7 @@ module.Properties = {
 		"StudsOffset"
 	},
 	Part = {"Shape"},
+	UnionOperation = {},
 	VehicleSeat = {
 		"Disabled",
 		"HeadsUpDisplay",
