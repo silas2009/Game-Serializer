@@ -62,5 +62,23 @@ function Serialize.ColorSequence(Value)
 		Keypoints = Keypoints
 	}
 end
+function Serialize.NumberSequenceKeypoint(Value)
+	return {
+		Type = "NumberSequenceKeypoint",
+		Value = Value.Value,
+		Time = Value.Time,
+		Envelope = Value.Envelope
+	}
+end
+function Serialize.NumberSequence(Value)
+	local Keypoints = {}
+	for _,Keypoint in ipairs(Value.Keypoints) do
+		table.insert(Keypoints,Serialize.NumberSequenceKeypoint(Keypoint))
+	end
+	return {
+		Type = "NumberSequence",
+		Keypoints = Keypoints
+	}
+end
 
 return Serialize
