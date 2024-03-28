@@ -37,5 +37,15 @@ function Deserialize.ColorSequence(Value)
 	end
 	return ColorSequence.new(keypoints)
 end
+function Deserialize.NumberSequenceKeypoint(Value)
+	return NumberSequenceKeypoint.new(Value.Time,Value.Value,Value.Envelope)
+end
+function Deserialize.NumberSequence(Value)
+	local keypoints = {}
+	for i,v in ipairs(Value.Keypoints) do
+		table.insert(keypoints,Deserialize.NumberSequenceKeypoint(v))
+	end
+	return NumberSequence.new(keypoints)
+end
 
 return Deserialize
