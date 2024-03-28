@@ -2,6 +2,7 @@ local module = {}
 
 local BaseClasses = {
 	GuiObject = {
+		"AnchorPoint",
 		"Position",
 		"Size",
 		"Visible",
@@ -99,12 +100,16 @@ module.Properties = {
 	ImageLabel = {
 		"Image",
 		"ImageColor3",
-		"ImageTransparency"
+		"ImageTransparency",
+		"ImageRectOffset",
+		"ImageRectSize"
 	},
 	ImageButton = {
 		"Image",
 		"ImageColor3",
-		"ImageTransparency"
+		"ImageTransparency",
+		"ImageRectOffset",
+		"ImageRectSize"
 	},
 	ScrollingFrame = {
 		"BottomImage",
