@@ -137,13 +137,6 @@ module.Properties = {
 		"StudsOffset"
 	},
 	Part = {"Shape"},
-	Meshpart = {
-		"DoubleSided",
-		"MeshId",
-		"TextureId",
-		"RenderFidelity",
-		"CollisionFidelity",
-	},
 	VehicleSeat = {
 		"Disabled",
 		"HeadsUpDisplay",
@@ -215,6 +208,35 @@ module.Properties = {
 		"Neutral",
 		"TeamColor",
 		"Duration"
+	},
+	ParticleEmitter = {
+		"Color",
+		"LightEmission",
+		"LightInfluence",
+		"Orientation",
+		"Size",
+		"Squash",
+		"Texture",
+		"Transparency",
+		"ZOffset",
+		"EmissionDirection",
+		"Enabled",
+		"Lifetime",
+		"Rate",
+		"Rotation",
+		"RotSpeed",
+		"Speed",
+		"SpreadAngle",
+		"Shape",
+		"ShapeInOut",
+		"ShapeStyle",
+		"FlipbookLayout",
+		"Acceleration",
+		"Drag",
+		"LockedToPart",
+		"TimeScale",
+		"VelocityInheritance",
+		"WindAffectsDrag"
 	},
 	Sparkles = {
 		"SparkleColor"
