@@ -514,6 +514,7 @@ local InheritedClasses = {
 	Weld = {"JointInstance"},
 	Part = {"BasePart"},
 	WedgePart = {"BasePart"},
+	UnionOperation = {"BasePart"},
 	VehicleSeat = {"BasePart"},
 	Vector3Value = {"ValueBase"},
 	TrussPart = {"BasePart"},
