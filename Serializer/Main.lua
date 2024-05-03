@@ -755,14 +755,14 @@ if remoteFunctions then
 end
 
 function createObj(ClassName,Parent)
-	if ClassName == "Part" then
+	--[[if ClassName == "Part" then
 		local part = InsertToolbox:InvokeServer("Brick","Models","Building",Vector3.zero)[1]
 		spawn(function() if Parent then ChangeProperty:FireServer(part,"Parent",Parent) end end)
 		return part,false
-	else
+	else--]]
 		local v1,v2 = getCode()
 		return CreateObject:InvokeServer(ClassName,Parent,v1,v2),true
-	end
+	--end
 end
 
 local insertButton = gui.Main.Container.Bottom.Insert
