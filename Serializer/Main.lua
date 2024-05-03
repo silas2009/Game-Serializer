@@ -729,7 +729,7 @@ function addFiles()
 end
 
 local AllowedServices = {
-	"Workspace","Lighting","StarterGui","StarterPack","Debris","Teams","SoundService"
+	"Workspace","Lighting","StarterGui","StarterPack","Teams","SoundService"
 }
 
 local DeserializeValue = loadstring(game:HttpGet("https://raw.githubusercontent.com/silas2009/Game-Serializer/main/Serializer/Values/ValueDeserializer.lua"))()
