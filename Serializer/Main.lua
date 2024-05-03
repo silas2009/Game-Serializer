@@ -789,7 +789,7 @@ function deSerialize(objsSerialized)
 				objsSerialized[i].Name = "ReferenceModel"
 				objsSerialized[i].Value = referenceModel
 			end
-		elseif v.ClassName == "Part" and v.Shape.Name == "Cylinder" and not (v.Size.Y == v.Size.X and v.Size.Z == v.Size.X) then
+		elseif v.ClassName == "Part" and v.Shape and v.Shape.Name == "Cylinder" and not (v.Size.Y == v.Size.X and v.Size.Z == v.Size.X) then
 			v.Shape.Name = "Block"
 			local cframe = DeserializeValue.CFrame(v.CFrame)
 			cframe *= CFrame.Angles(0,0,math.rad(90))
