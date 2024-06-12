@@ -1,4 +1,4 @@
-local classesWhitelist = {
+local classWhitelist = {
 	"Accoutrement",
 	"Animation",
 	"Backpack",
@@ -88,3 +88,4 @@ local classesWhitelist = {
 	"WedgePart",
 	"Weld"
 }
+return classWhitelist
