@@ -27,7 +27,7 @@ function convertId(assetId)
     return assetId
 end
 
-function module.Serialize(Object)
+function module.Serialize(Object,json)
 	local defaultProperties = {}
 	local objs
 	if Object == game then
@@ -72,13 +72,7 @@ function module.Serialize(Object)
 		end
 	end
 	local blackListedObjs = {}
-	for _,v in pairs(objs) do
-		if not v:GetAttribute("VisualSource") and (v:FindFirstAncestorOfClass("StarterGui") and not v:GetAttribute("RetroCreated")) then
-			table.insert(blackListedObjs,v)
-		end
-	end
 	for _,v in ipairs(objs) do
-		task.wait()
 		if not table.find(blacklist,v.ClassName) and not table.find(fakeSurfaces,v) and not table.find(blackListedObjs,v) then
 			local objSerialized = {}
 			local classProp = props[v.ClassName]
@@ -102,14 +96,6 @@ function module.Serialize(Object)
 						end
 					end
 				end
-				if (v:IsA("Script") or v:IsA("LocalScript")) then
-					if v:GetAttribute("VisualSource") then
-						objSerialized.VisualSource = v:GetAttribute("VisualSource")
-					end
-					if v:GetAttribute("IsReferenceModel") then
-						objSerialized.IsReferenceModel = v:GetAttribute("IsReferenceModel")
-					end
-				end
 				for _,prop in pairs(classProp) do
 					if not objSerialized[prop] then
 						local defaultValue = defaultProperties[v.ClassName]
@@ -126,11 +112,6 @@ function module.Serialize(Object)
 						local objProperty = v[prop]
 						if prop ~= "ClassName" and objProperty == defaultValue then
 							continue
-						end
-						if v:IsA("BasePart") and prop == "Anchored" then
-							if v:GetAttribute("Anchored") ~= nil then
-								objProperty = v:GetAttribute("Anchored")
-							end
 						end
 						local Function = SerializeValues[typeof(objProperty)]
 						if Function then
@@ -157,12 +138,15 @@ function module.Serialize(Object)
 				local foundObj = table.find(objTable,realObj[prop])
 				v[prop] = {Type = "Instance", ["Instance"] = foundObj}
 				if prop == "Parent" and realObj[prop].Parent == game and table.find(AllowedServices,realObj[prop].ClassName) then
-					v[prop].Instance = realObj[prop].Name
+					v[prop].Instance = realObj[prop].ClassName
 				end
 			end
 		end
 	end
 	
+	if json then
+		objsSerialized = game:GetService("HttpService"):JSONEncode(objsSerialized)
+	end
 	return objsSerialized
 end
 
