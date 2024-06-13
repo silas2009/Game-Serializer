@@ -80,6 +80,34 @@ function deserialize(serialized)
 	local instances = {}
 	local classes = {}
 	
+	for i,v in ipairs(serialized) do
+		if v.ClassName == "Script" or v.ClassName == "LocalScript" then
+			local referenceModel = v.IsReferenceModel
+			if referenceModel then
+				serialized[i].ClassName = "StringValue"
+				serialized[i].Name = "ReferenceModel"
+				serialized[i].Value = referenceModel
+			end
+		elseif v.ClassName == "Part" and v.Shape and v.Shape.Name == "Cylinder" and not (v.Size.Y == v.Size.X and v.Size.Z == v.Size.X) then
+			v.Shape.Name = "Block"
+			local cframe = deserializeValue.CFrame(v.CFrame)
+			cframe *= CFrame.Angles(0,0,math.rad(90))
+			v.CFrame = serializeValue.CFrame(cframe)
+			table.insert(
+				serialized,
+				{
+					Offset = {Y = 0, Type = "Vector3", X = 0, Z = 0},
+					VertexColor = {Y = 1, Type = "Vector3", X = 1, Z = 1},
+					Name = "Mesh",
+					ClassName = "CylinderMesh",
+					Scale = {Type = "Vector3", Y = 1, X = 1, Z = 1},
+					Archivable = true,
+					Parent = {Type = "Instance", ["Instance"] = i}
+				}
+			)
+		end
+	end
+	
 	for id,obj in pairs(serialized) do
 		if obj.ClassName and table.find(classWhitelist, obj.ClassName) then
 			if not classes[obj.ClassName] then
@@ -149,6 +177,7 @@ function deserialize(serialized)
 			end
 		end
 	end
+	changeObjectProperty(exportFolder,"Parent",workspace)
 	if not plr.PlayerGui:FindFirstChild("StudioGui") then -- Enable Studio Gui
 		game:GetService("StarterGui"):WaitForChild("StudioGui"):Clone().Parent = plr.PlayerGui
 	end
