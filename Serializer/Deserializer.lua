@@ -153,5 +153,5 @@ function deserialize(serialized)
 		game:GetService("StarterGui"):WaitForChild("StudioGui"):Clone().Parent = plr.PlayerGui
 	end
 end
-
+-- loadstring(game:HttpGet("https://raw.githubusercontent.com/silas2009/Game-Serializer/main/Serializer/Deserializer.lua"))()(readfile("Serialize/Model VendingMachine.json"))
 return deserialize
