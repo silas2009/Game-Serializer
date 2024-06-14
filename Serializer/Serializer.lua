@@ -74,7 +74,71 @@ function module.Serialize(Object,json)
 	local blackListedObjs = {}
 	local times = 0
 	local progress = 0
-	
+	for _,v in ipairs(objs) do
+		if not table.find(blacklist,v.ClassName) and not table.find(fakeSurfaces,v) and not table.find(blackListedObjs,v) then
+			times += 1
+			progress += 1
+			-- print((progress/#objs)*100 .. "/" .. 100)
+			if times >= 25 then
+				task.wait(0.1)
+				times = 0
+			end
+			local objSerialized = {}
+			local classProp = props[v.ClassName]
+			if classProp then
+				local surfaceobj
+				if v:IsA("BasePart") then
+					for _,v2 in pairs(partsWithSurfaces) do
+						if v2.Part == v then
+							surfaceobj = v2
+							surfaceobj["Part"] = nil
+						end
+					end
+				end
+				if surfaceobj then
+					for propName,prop in pairs(surfaceobj) do
+						local Function = SerializeValues[typeof(v[propName])]
+						if Function then
+							objSerialized[propName] = Function(prop)
+						else
+							objSerialized[propName] = prop
+						end
+					end
+				end
+				for _,prop in pairs(classProp) do
+					if not objSerialized[prop] then
+						local defaultValue = defaultProperties[v.ClassName]
+						if not defaultValue then
+							local success,defaultinst = pcall(function()
+								return Instance.new(v.ClassName)
+							end)
+							if success then
+								defaultProperties[v.ClassName] = defaultinst
+								defaultValue = defaultinst
+							end
+						end
+						defaultValue = defaultValue and defaultValue[prop]
+						local objProperty = v[prop]
+						if prop ~= "ClassName" and objProperty == defaultValue then
+							continue
+						end
+						local Function = SerializeValues[typeof(objProperty)]
+						if Function then
+							objSerialized[prop] = Function(objProperty)
+						else
+							objSerialized[prop] = objProperty
+						end
+						if typeof(objSerialized[prop]) == "string" then
+							objSerialized[prop] = convertId(objSerialized[prop])
+						end
+					end
+				end
+			end
+
+			table.insert(objsSerialized,objSerialized)
+			table.insert(objTable,v)
+		end
+	end
 	local progress = 0
 	for i,v in ipairs(objsSerialized) do
 		progress += 1
@@ -95,7 +159,7 @@ function module.Serialize(Object,json)
 	if json then
 		objsSerialized = game:GetService("HttpService"):JSONEncode(objsSerialized)
 	end
-	return {} -- objsSerialized
+	return objsSerialized
 end
 
 return module
