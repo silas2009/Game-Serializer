@@ -73,9 +73,12 @@ function module.Serialize(Object,json)
 	end
 	local blackListedObjs = {}
 	local times = 0
+	local progress = 0
 	for _,v in ipairs(objs) do
 		if not table.find(blacklist,v.ClassName) and not table.find(fakeSurfaces,v) and not table.find(blackListedObjs,v) then
 			times += 1
+			progress += 1
+			print((progress/#objs)*100 .. "/" .. 100)
 			if times >= 50 then
 				task.wait(0.03)
 				times = 0
