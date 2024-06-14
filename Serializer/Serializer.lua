@@ -74,6 +74,7 @@ function module.Serialize(Object,json)
 	local blackListedObjs = {}
 	for _,v in ipairs(objs) do
 		if not table.find(blacklist,v.ClassName) and not table.find(fakeSurfaces,v) and not table.find(blackListedObjs,v) then
+			task.wait(0.03)
 			local objSerialized = {}
 			local classProp = props[v.ClassName]
 			if classProp then
