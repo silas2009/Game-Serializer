@@ -16,15 +16,15 @@ local TextureSurfaces = loadstring(game:HttpGet("https://raw.githubusercontent.c
 local TextureMaterials = loadstring(game:HttpGet("https://raw.githubusercontent.com/silas2009/Game-Serializer/main/Serializer/Textures/RetroStudioMaterialTextures.lua"))()
 
 function convertId(assetId)
-    local starts = {
-        "http://www.roblox.com/asset?id="
-    }
-    for i,v in pairs(starts) do
-        if string.sub(assetId,0,#v) == v then
-            return "rbxassetid://" .. string.sub(assetId,#v+1,#assetId)
-        end
-    end
-    return assetId
+	local starts = {
+		"http://www.roblox.com/asset?id="
+	}
+	for i,v in pairs(starts) do
+		if string.sub(assetId,0,#v) == v then
+			return "rbxassetid://" .. string.sub(assetId,#v+1,#assetId)
+		end
+	end
+	return assetId
 end
 
 function module.Serialize(Object,json)
@@ -33,7 +33,7 @@ function module.Serialize(Object,json)
 	if Object == game then
 		objs = {}
 		for i,v in pairs(AllowedServices) do
-			service = game:GetService(v)
+			local service = game:GetService(v)
 			if service then
 				for _,obj in pairs(service:GetDescendants()) do
 					table.insert(objs,obj)
@@ -72,9 +72,14 @@ function module.Serialize(Object,json)
 		end
 	end
 	local blackListedObjs = {}
+	local times = 0
 	for _,v in ipairs(objs) do
 		if not table.find(blacklist,v.ClassName) and not table.find(fakeSurfaces,v) and not table.find(blackListedObjs,v) then
-			task.wait(0.03)
+			times += 1
+			if times >= 50 then
+				task.wait(0.03)
+				times = 0
+			end
 			local objSerialized = {}
 			local classProp = props[v.ClassName]
 			if classProp then
@@ -144,7 +149,7 @@ function module.Serialize(Object,json)
 			end
 		end
 	end
-	
+
 	if json then
 		objsSerialized = game:GetService("HttpService"):JSONEncode(objsSerialized)
 	end
