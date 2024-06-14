@@ -79,8 +79,8 @@ function module.Serialize(Object,json)
 			times += 1
 			progress += 1
 			print((progress/#objs)*100 .. "/" .. 100)
-			if times >= 150 then
-				task.wait(0.03)
+			if times >= 50 then
+				task.wait(0.05)
 				times = 0
 			end
 			local objSerialized = {}
