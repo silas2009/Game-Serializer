@@ -965,7 +965,8 @@ serializeButton.MouseButton1Click:Connect(function()
 	serializeButton.BackgroundColor3 = Color3.new(ogColor.R/2,ogColor.G/2,ogColor.B/2)
 	local serialized = game:GetService("HttpService"):JSONEncode(serializerFunction.Serialize(currentPath))
 	task.wait(0.5)
-	writefile("Serialize/" .. filename .. ".json",serialized)
+	print(serialized)
+	-- writefile("Serialize/" .. filename .. ".json",serialized)
 	task.wait()
 	serializeButton.Text = "Serialize"
 	serializeButton.BackgroundColor3 = ogColor
