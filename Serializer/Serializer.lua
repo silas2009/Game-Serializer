@@ -139,7 +139,10 @@ function module.Serialize(Object,json)
 			table.insert(objTable,v)
 		end
 	end
+	local progress = 0
 	for i,v in ipairs(objsSerialized) do
+		progress += 1
+		print((progress/#objs)*100 .. "/" .. 100)
 		local realObj = objTable[i]
 		local classProp = InstanceProps[v.ClassName]
 		if classProp then
