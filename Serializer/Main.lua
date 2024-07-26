@@ -33,7 +33,7 @@ function createButtonTemplate(IsExplorerGui)
 	c.Position=UDim2.new(0,1,0,1)
 	c.BackgroundColor3=Color3.fromRGB(255,255,255)
 	c.ImageRectSize=Vector2.new(16,16)
-	c.Image="rbxasset://textures/ClassImages.png"
+	c.Image="rbxasset://textures/ClassImages.PNG"
 	c.Parent=a
 	local d=Instance.new"TextLabel"
 	d.Name="InstanceName"
