@@ -5,26 +5,28 @@ local http = game:GetService("HttpService")
 module.settings.blacklist = {"Terrain","Camera","TouchTransmitter"}
 module.settings.allowedServices = {"Workspace","Lighting","StarterGui","StarterPack","Teams","SoundService"}
 
-module.modules.properties = require(script.Properties)
+local githubLink = "https://raw.githubusercontent.com/silas2009/Game-Serializer/main/Serializer/"
+
+module.modules.properties = loadstring(game:HttpGet(githubLink .. "Properties.lua"))()
 local props = module.modules.properties.Properties
 local InstanceProps = module.modules.properties.InstanceProperties
-module.modules.scriptSerializer = require(script.ScriptSerializer)
+module.modules.scriptSerializer = loadstring(game:HttpGet(githubLink .. "ScriptSerializer.lua"))()
 module.modules.values = {
-	valueSerializer = require(script.Values.ValueSerializer),
-	valueDeserializer = require(script.Values.ValueDeserializer)
+	valueSerializer = loadstring(game:HttpGet(githubLink .. "Values/ValueSerializer.lua"))(),
+	valueDeserializer = loadstring(game:HttpGet(githubLink .. "Values/ValueDeserializer.lua"))(),
 }
 module.modules.textures = {
-	surfaceTextures = require(script.Textures.RetroStudioSurfaceTextures),
-	materialTextures = require(script.Textures.RetroStudioMaterialTextures)
+	surfaceTextures = loadstring(game:HttpGet(githubLink .. "Textures/RetroStudioSurfaceTextures.lua"))(),
+	materialTextures = loadstring(game:HttpGet(githubLink .. "Textures/RetroStudioMaterialTextures.lua"))()
 }
 module.modules.util = {
-	guis = require(script.Util.GUIs),
-	building = require(script.Util.Building),
-	functions = require(script.Util.Functions)
+	guis = loadstring(game:HttpGet(githubLink .. "Util/GUIs.lua"))(),
+	building = loadstring(game:HttpGet(githubLink .. "Util/Building.lua"))(),
+	functions = loadstring(game:HttpGet(githubLink .. "Util/Functions.lua"))()
 }
 module.modules.resources = {
-	classIcons = require(script.Resources.ClassIcons),
-	classWhitelist = require(script.Resources.ClassWhitelist)
+	classIcons = loadstring(game:HttpGet(githubLink .. "Util/ClassIcons.lua"))(),
+	classWhitelist = loadstring(game:HttpGet(githubLink .. "Util/ClassWhitelist.lua"))()
 }
 
 local convertId = module.modules.util.functions.convertId
