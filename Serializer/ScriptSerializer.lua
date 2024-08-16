@@ -1,8 +1,10 @@
 local isStudio = game.PlaceId == 5846387555
 
+if not isStudio then return end
+
 local rs = game:GetService("ReplicatedStorage")
 local ScriptService = rs.ScriptService
-local compression = require(ScriptService.Compression)
+local compression = require(ScriptService).Compression
 local converter = require(ScriptService.LoadModules:FindFirstChild("0000000000000001"))
 local remoteFunctions = rs:WaitForChild("RemoteFunctions",2)
 local createBlock = remoteFunctions and remoteFunctions.ScriptEditor.CreateBlock
