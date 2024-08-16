@@ -566,7 +566,7 @@ function explorer()
 	return self
 end
 
-local isStudio = true
+local isStudio = game.PlaceId == 5846387555
 local currentCategory = isStudio and "Explorer" or "Exports"
 local currentExplorer = currentCategory == "Explorer" and explorer()
 local serializing = false
