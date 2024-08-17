@@ -156,6 +156,7 @@ function module.Serialize(Object,json)
 end
 
 function module.Deserialize(serialized,updateFunction)
+	print("Loading...")
 	if typeof(serialized) == "string" then serialized = http:JSONDecode(serialized) end
 	
 	local playerGui = game:GetService("Players").LocalPlayer:FindFirstChildOfClass("PlayerGui")
