@@ -637,6 +637,13 @@ sidebar.Padding.Details.Bottom.BackButton.MouseButton1Click:Connect(function()
 end)
 
 function selectTab(tabName)
+	if tabName == "Exports" then
+		exportsScrollingFrame.Visible = true
+		explorerScrollingFrame.Visible = false
+	elseif tabName == "Explorer" then
+		explorerScrollingFrame.Visible = true
+		exportsScrollingFrame.Visible = false
+	end
 	if currentExplorer and tabName ~= "Explorer" then currentExplorer:stop() currentExplorer = nil end
 	for i,v in pairs(tabsUI:GetChildren()) do
 		if v:FindFirstChild("Selected") then
@@ -701,13 +708,9 @@ tabsUI.Explorer.Button.MouseButton1Click:Connect(function()
 	if lastCategory ~= "Explorer" then
 		currentExplorer = explorer()
 	end
-	explorerScrollingFrame.Visible = true
-	exportsScrollingFrame.Visible = false
 end)
 tabsUI.Exports.Button.MouseButton1Click:Connect(function()
 	selectTab("Exports")
-	exportsScrollingFrame.Visible = true
-	explorerScrollingFrame.Visible = false
 end)
 topbar.Exit.MouseButton1Click:Connect(function()
 	gui:Destroy()
