@@ -721,3 +721,4 @@ topbar.Exit.MouseButton1Click:Connect(function()
 		currentExplorer:stop()
 	end
 end)
+selectTab(currentCategory)
