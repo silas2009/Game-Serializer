@@ -170,7 +170,9 @@ function module.Deserialize(serialized,updateFunction)
 	local playerGui = game:GetService("Players").LocalPlayer:FindFirstChildOfClass("PlayerGui")
 	local retrostudioUI = playerGui:FindFirstChild("StudioGui")
 	if retrostudioUI then
-		retrostudioUI:Destroy()
+		for _,v in pairs(playerGui:GetChildren()) do
+			v:Destroy()
+		end
 	end
 	
 	local clonesUsed = {}
@@ -259,7 +261,9 @@ function module.Deserialize(serialized,updateFunction)
 	
 	local retrostudioUI = game:GetService("StarterGui"):FindFirstChild("StudioGui")
 	if retrostudioUI then
-		retrostudioUI:Clone().Parent = playerGui
+		for _,v in pairs(game:GetService("StarterGui"):GetChildren()) do
+			v:Clone().Parent = playerGui
+		end
 	end
 	
 	module.modules.util.building.destroy(cloneResources)
