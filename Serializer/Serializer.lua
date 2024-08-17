@@ -166,14 +166,16 @@ function module.Deserialize(serialized,updateFunction)
 	local instances = {}
 
 	for id,v in ipairs(serialized) do
-		local success,instance = pcall(function()
-			return build.createObj(v.ClassName, unparentedFolder)
-		end)
-		if success and instance then
-			if updateFunction then
-				updateFunction(id,#serialized,"Building")
+		if table.find(module.modules.resources.classWhitelist,v.ClassName) then
+			local success,instance = pcall(function()
+				return build.createObj(v.ClassName, unparentedFolder)
+			end)
+			if success and instance then
+				if updateFunction then
+					updateFunction(id,#serialized,("Building %s \"%s\""):format(v.ClassName,v.Name or v.ClassName))
+				end
+				instances[tostring(id)] = instance
 			end
-			instances[tostring(id)] = instance
 		end
 	end
 
