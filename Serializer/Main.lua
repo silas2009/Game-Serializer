@@ -669,6 +669,7 @@ function loadExportsList()
 			local button = makeExportedInstanceButton(exportsScrollingFrame,readfile(v),fileExtension[1])
 			button.Delete.MouseButton1Click:Connect(function()
 				delfile(v)
+				loadExportsList()
 			end)
 			button.Button.MouseButton1Down:Connect(function()
 				selectedExport = v
