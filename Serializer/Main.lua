@@ -701,9 +701,13 @@ tabsUI.Explorer.Button.MouseButton1Click:Connect(function()
 	if lastCategory ~= "Explorer" then
 		currentExplorer = explorer()
 	end
+	explorerScrollingFrame.Visible = true
+	exportsScrollingFrame.Visible = false
 end)
 tabsUI.Exports.Button.MouseButton1Click:Connect(function()
 	selectTab("Exports")
+	exportsScrollingFrame.Visible = true
+	explorerScrollingFrame.Visible = false
 end)
 topbar.Exit.MouseButton1Click:Connect(function()
 	gui:Destroy()
