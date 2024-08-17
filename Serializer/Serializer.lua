@@ -40,6 +40,7 @@ function module.Serialize(Object,json)
 		for i,v in pairs(module.settings.allowedServices) do
 			local service = game:GetService(v)
 			if service then
+				table.insert(objs,service)
 				for _,obj in pairs(service:GetDescendants()) do
 					table.insert(objs,obj)
 				end
@@ -49,7 +50,7 @@ function module.Serialize(Object,json)
 		objs = Object:GetDescendants()
 	end
 	local objsSerialized = {}
-	if Object ~= game and Object.Parent ~= game then
+	if Object ~= game then
 		table.insert(objs,Object)
 	end
 	local objTable = {}
@@ -76,62 +77,70 @@ function module.Serialize(Object,json)
 			end
 		end
 	end
-	local blackListedObjs = {}
 	for _,v in ipairs(objs) do
-		if not table.find(module.settings.blacklist,v.ClassName) and not table.find(fakeSurfaces,v) and not table.find(blackListedObjs,v) then
-			local objSerialized = {}
-			local classProp = props[v.ClassName]
-			if classProp then
-				local surfaceobj
-				if v:IsA("BasePart") then
-					for _,v2 in pairs(partsWithSurfaces) do
-						if v2.Part == v then
-							surfaceobj = v2
-							surfaceobj["Part"] = nil
-						end
-					end
-				end
-				if surfaceobj then
-					for propName,prop in pairs(surfaceobj) do
-						local Function = module.modules.values.valueSerializer[typeof(v[propName])]
-						if Function then
-							objSerialized[propName] = Function(prop)
-						else
-							objSerialized[propName] = prop
-						end
-					end
-				end
-				for _,prop in pairs(classProp) do
-					if not objSerialized[prop] then
-						local defaultValue = defaultProperties[v.ClassName]
-						if not defaultValue then
-							local success,defaultinst = pcall(function()
-								return Instance.new(v.ClassName)
-							end)
-							if success then
-								defaultProperties[v.ClassName] = defaultinst
-								defaultValue = defaultinst
+		if not table.find(module.settings.blacklist,v.ClassName) and not table.find(fakeSurfaces,v) then
+			local serializedObj = {}
+			if v.Parent == game then
+				serializedObj.ClassName = v.ClassName
+				serializedObj.Name = v.Name
+				serializedObj.Parent = {
+					["Instance"] = "Game",
+					["Type"] = "Instance"
+				}
+			else
+				local classProp = props[v.ClassName]
+				if classProp then
+					local surfaceobj
+					if v:IsA("BasePart") then
+						for _,_v in pairs(partsWithSurfaces) do
+							if _v.Part == v then
+								surfaceobj = _v
+								surfaceobj["Part"] = nil
 							end
 						end
-						defaultValue = defaultValue and defaultValue[prop]
-						local objProperty = v[prop]
-						if prop ~= "ClassName" and objProperty == defaultValue then
-							continue
+					end
+					if surfaceobj then
+						for propName,prop in pairs(surfaceobj) do
+							local Function = module.modules.values.valueSerializer[typeof(v[propName])]
+							if Function then
+								serializedObj[propName] = Function(prop)
+							else
+								serializedObj[propName] = prop
+							end
 						end
-						local Function = module.modules.values.valueSerializer[typeof(objProperty)]
-						if Function then
-							objSerialized[prop] = Function(objProperty)
-						else
-							objSerialized[prop] = objProperty
-						end
-						if typeof(objSerialized[prop]) == "string" then
-							objSerialized[prop] = convertId(objSerialized[prop])
+					end
+					for _,prop in pairs(classProp) do
+						if not serializedObj[prop] then
+							local defaultValue = defaultProperties[v.ClassName]
+							if not defaultValue then
+								local success,defaultinst = pcall(function()
+									return Instance.new(v.ClassName)
+								end)
+								if success then
+									defaultProperties[v.ClassName] = defaultinst
+									defaultValue = defaultinst
+								end
+							end
+							defaultValue = defaultValue and defaultValue[prop]
+							local objProperty = v[prop]
+							if prop ~= "ClassName" and objProperty == defaultValue then
+								continue
+							end
+							local Function = module.modules.values.valueSerializer[typeof(objProperty)]
+							if Function then
+								serializedObj[prop] = Function(objProperty)
+							else
+								serializedObj[prop] = objProperty
+							end
+							if typeof(serializedObj[prop]) == "string" then
+								serializedObj[prop] = convertId(serializedObj[prop])
+							end
 						end
 					end
 				end
 			end
 
-			table.insert(objsSerialized,objSerialized)
+			table.insert(objsSerialized,serializedObj)
 			table.insert(objTable,v)
 		end
 	end
@@ -163,7 +172,6 @@ function module.Deserialize(serialized,updateFunction)
 	if retrostudioUI then
 		retrostudioUI:Destroy()
 	end
-	--task.wait(0.5)
 	
 	local clonesUsed = {}
 	local cloneResources = module.modules.util.building.createCloneResources(serialized)
@@ -172,6 +180,14 @@ function module.Deserialize(serialized,updateFunction)
 	build.setProperty(exportFolder,"Name","Export")
 	local unparentedFolder = build.createObj("Folder", exportFolder)
 	build.setProperty(unparentedFolder,"Name","Unparented")
+	local serviceFolders = {}
+	for id,v in ipairs(serialized) do
+		if v.Parent and v.Parent.Instance == "Game" then
+			local folder = module.modules.util.building.createObj("Folder",exportFolder)
+			module.modules.util.building.setProperty(folder,"Name",v.ClassName)
+			serviceFolders[v.ClassName] = folder
+		end
+	end
 
 	local instances = {} 
 	
@@ -219,18 +235,18 @@ function module.Deserialize(serialized,updateFunction)
 							if typeof(propValue.Instance) == "number" then
 								local otherInstance = instances[tostring(propValue.Instance)]
 								if not otherInstance and propName == "Parent" then
-									build.setProperty(instance,"Parent",exportFolder)
+									build.setProperty(instance,"Parent",unparentedFolder)
 								else
 									build.setProperty(instance,propName,otherInstance)
 								end
 							elseif typeof(propValue.Instance) == "string" then
-								local otherInstance = exportFolder
+								local otherInstance = serviceFolders[propValue.Instance] or unparentedFolder
 								if otherInstance then
 									build.setProperty(instance,propName,otherInstance)
 								end
 							end
 							if not instance.Parent then
-								build.setProperty(instance,"Parent",exportFolder)
+								build.setProperty(instance,"Parent",unparentedFolder)
 							end
 						end
 					else
