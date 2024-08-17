@@ -25,8 +25,8 @@ module.modules.util = {
 	functions = loadstring(game:HttpGet(githubLink .. "Util/Functions.lua"))()
 }
 module.modules.resources = {
-	classIcons = loadstring(game:HttpGet(githubLink .. "Util/ClassIcons.lua"))(),
-	classWhitelist = loadstring(game:HttpGet(githubLink .. "Util/ClassWhitelist.lua"))()
+	classIcons = loadstring(game:HttpGet(githubLink .. "Resources/ClassIcons.lua"))(),
+	classWhitelist = loadstring(game:HttpGet(githubLink .. "Resources/ClassWhitelist.lua"))()
 }
 
 local convertId = module.modules.util.functions.convertId
