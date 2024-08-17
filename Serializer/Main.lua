@@ -580,7 +580,7 @@ local sideButtons = {
 	},
 	Export = {
 		func = function()
-			writefile(exportsPath .. "\\" .. ("%s %s.json"):format(currentExplorer.selected.ClassName,currentExplorer.selected.Name),serializer.Serialize(currentExplorer.selected,true))
+			writefile(exportsPath .. "/" .. ("%s %s.json"):format(currentExplorer.selected.ClassName,currentExplorer.selected.Name),serializer.Serialize(currentExplorer.selected,true))
 			loadExportsList()
 		end,
 		category = {"Explorer"},
@@ -655,7 +655,7 @@ function loadExportsList()
 		end
 	end
 	for _,v in pairs(listfiles(exportsPath)) do
-		local filePath = v:split("\\")
+		local filePath = v:split("/")
 		local fileName = filePath[#filePath]
 		local fileExtension = fileName:split(".")
 		if fileExtension[2] == "json" or fileExtension[2] == "txt" then
