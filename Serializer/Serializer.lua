@@ -157,18 +157,24 @@ end
 
 function module.Deserialize(serialized,updateFunction)
 	if typeof(serialized) == "string" then serialized = http:JSONDecode(serialized) end
+	
+	local clonesUsed = {}
+	local cloneResources = module.modules.util.building.createCloneResources(serialized)
 
 	local exportFolder = build.createObj("Folder", game:GetService("Lighting"))
 	build.setProperty(exportFolder,"Name","Export")
 	local unparentedFolder = build.createObj("Folder", exportFolder)
 	build.setProperty(unparentedFolder,"Name","Unparented")
 
-	local instances = {}
-
+	local instances = {} 
+	
 	for id,v in ipairs(serialized) do
 		if table.find(module.modules.resources.classWhitelist,v.ClassName) then
 			local success,instance = pcall(function()
-				return build.createObj(v.ClassName, unparentedFolder)
+				local obj = build.createObj(v.ClassName, unparentedFolder, true, cloneResources, clonesUsed)
+				table.insert(clonesUsed,obj)
+				print(obj)
+				return obj
 			end)
 			if success and instance then
 				if updateFunction then
@@ -181,7 +187,9 @@ function module.Deserialize(serialized,updateFunction)
 			end
 		end
 	end
-
+	
+	repeat task.wait() until #cloneResources:GetChildren() == 0
+	
 	for id,v in pairs(serialized) do
 		if instances[tostring(id)] then
 			local instance = instances[tostring(id)]
@@ -226,6 +234,8 @@ function module.Deserialize(serialized,updateFunction)
 			end
 		end
 	end
+	
+	module.modules.util.building.destroy(cloneResources)
 
 	return exportFolder
 end
