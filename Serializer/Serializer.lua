@@ -164,7 +164,7 @@ function module.Deserialize(serialized,updateFunction)
 	if retrostudioUI then
 		retrostudioUI:Destroy()
 	end
-	task.wait(2)
+	task.wait(0.5)
 	
 	local clonesUsed = {}
 	local cloneResources = module.modules.util.building.createCloneResources(serialized)
