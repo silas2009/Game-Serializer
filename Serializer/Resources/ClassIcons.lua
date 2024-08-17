@@ -232,6 +232,7 @@ local classIcons = {
 	TextChatService = Vector2.new(2288,0),
 	TerrainDetail = Vector2.new(2304,0),
 	AdGui = Vector2.new(2320,0),
-	AdPortal = Vector2.new(2336,0)
+	AdPortal = Vector2.new(2336,0),
+	ReferenceModel = {Image="rbxassetid://6850313535",ImageRectOffset=Vector2.new(0,0),ImageRectSize=Vector2.new(0,0)}
 }
 return classIcons
