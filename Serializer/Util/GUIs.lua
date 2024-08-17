@@ -200,14 +200,26 @@ function module.makeExportedInstanceButton(parent,info,filename)
 
 	local mainInstance
 	for i,v in pairs(info) do
-		if v.Parent and (v.Parent.Instance == "Workspace" or not v.Parent.Instance) then
+		if v.Parent and (v.Parent.Instance == "Game") then
 			mainInstance = v
 			break
 		end
 	end
-	if mainInstance and typeof(mainInstance.Name) == "string" and typeof(mainInstance.ClassName) == "string" then
-		b.ImageRectOffset = mainInstance and classIcons[mainInstance.ClassName] or classIcons.Nil
-		d.Text = mainInstance and mainInstance.Name or filename
+	if not mainInstance then
+		for i,v in pairs(info) do
+			if v.Parent and (typeof(v.Parent.Instance) == "string" or not v.Parent.Instance) then
+				mainInstance = v
+				break
+			end
+		end
+	end
+	if mainInstance then
+		if typeof(mainInstance.ClassName) == "string" then
+			b.ImageRectOffset = mainInstance and classIcons[mainInstance.ClassName] or classIcons.Nil
+		end
+		if typeof(mainInstance.Name) == "string" then
+			d.Text = mainInstance and mainInstance.Name or filename
+		end
 	end
 
 	return a
