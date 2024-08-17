@@ -205,8 +205,8 @@ function module.makeExportedInstanceButton(parent,info,filename)
 			break
 		end
 	end
-	b.ImageRectOffset = classIcons[mainInstance.ClassName] or classIcons.Nil
-	d.Text = mainInstance.Name
+	b.ImageRectOffset = mainInstance and classIcons[mainInstance.ClassName] or classIcons.Nil
+	d.Text = mainInstance and mainInstance.Name or filename
 
 	return a
 end
