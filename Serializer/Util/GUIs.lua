@@ -130,8 +130,8 @@ function module.makeDetailText(parent,name,value)
 	return a
 end
 
-function module.makeExportedInstanceButton(parent,info,filename)
-	if typeof(info) == "string" then info = game:GetService("HttpService"):JSONDecode(info) end
+function module.makeExportedInstanceButton(parent,data,filename)
+	if typeof(data) == "string" then data = game:GetService("HttpService"):JSONDecode(data) end
 	local a=Instance.new"Frame"
 	a.Name="ExportedInstance"
 	a.Size=UDim2.new(1,0,0,26)
@@ -197,29 +197,20 @@ function module.makeExportedInstanceButton(parent,info,filename)
 	f.Image="rbxassetid://18155713435"
 	f.Parent=a
 	a.Parent=parent
+	
+	local function applyIcon(imagelabel,icon)
+		if typeof(icon) == "Vector2" then
+			imagelabel.ImageRectOffset = icon
+		elseif typeof(icon) == "table" then
+			imagelabel.ImageRectOffset = icon.ImageRectOffset or Vector2.new(0,0)
+			imagelabel.ImageRectSize = icon.ImageRectSize or Vector2.new(16,16)
+			imagelabel.Image = icon.Image or "rbxasset://textures/ClassImages.PNG"
+		end
+	end
 
-	local mainInstance
-	for i,v in pairs(info) do
-		if v.Parent and (v.Parent.Instance == "Game") then
-			mainInstance = v
-			break
-		end
-	end
-	if not mainInstance then
-		for i,v in pairs(info) do
-			if v.Parent and (typeof(v.Parent.Instance) == "string" or not v.Parent.Instance) then
-				mainInstance = v
-				break
-			end
-		end
-	end
-	if mainInstance then
-		if typeof(mainInstance.ClassName) == "string" then
-			b.ImageRectOffset = mainInstance and classIcons[mainInstance.ClassName] or classIcons.Nil
-		end
-		if typeof(mainInstance.Name) == "string" then
-			d.Text = mainInstance and mainInstance.Name or filename
-		end
+	if data.info then
+		applyIcon(b, data.info.mainInstance and classIcons[data.info.mainInstance.ClassName] or classIcons.Nil)
+		d.Text = data.info.mainInstance and data.info.mainInstance.Name or filename
 	end
 
 	return a
