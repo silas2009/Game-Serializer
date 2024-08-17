@@ -667,6 +667,9 @@ function loadExportsList()
 		local fileExtension = fileName:split(".")
 		if fileExtension[2] == "json" or fileExtension[2] == "txt" then
 			local button = makeExportedInstanceButton(exportsScrollingFrame,readfile(v),fileExtension[1])
+			button.Delete.MouseButton1Click:Connect(function()
+				delfile(v)
+			end)
 			button.Button.MouseButton1Down:Connect(function()
 				selectedExport = v
 				for _,b in pairs(exportsScrollingFrame:GetChildren()) do
@@ -699,7 +702,6 @@ function loadExportsList()
 		end
 	end
 end
-
 loadExportsList()
 
 tabsUI.Explorer.Button.MouseButton1Click:Connect(function()
