@@ -158,6 +158,12 @@ end
 function module.Deserialize(serialized,updateFunction)
 	if typeof(serialized) == "string" then serialized = http:JSONDecode(serialized) end
 	
+	local playerGui = game:GetService("Players").LocalPlayer:FindFirstChildOfClass("PlayerGui")
+	local retrostudioUI = playerGui:FindFirstChild("StudioGui")
+	if retrostudioUI then
+		retrostudioUI:Destroy()
+	end
+	
 	local clonesUsed = {}
 	local cloneResources = module.modules.util.building.createCloneResources(serialized)
 
@@ -165,12 +171,6 @@ function module.Deserialize(serialized,updateFunction)
 	build.setProperty(exportFolder,"Name","Export")
 	local unparentedFolder = build.createObj("Folder", exportFolder)
 	build.setProperty(unparentedFolder,"Name","Unparented")
-	
-	local playerGui = game:GetService("Players").LocalPlayer:FindFirstChildOfClass("PlayerGui")
-	local retrostudioUI = playerGui:FindFirstChild("StudioGui")
-	if retrostudioUI then
-		retrostudioUI:Destroy()
-	end
 
 	local instances = {} 
 	
