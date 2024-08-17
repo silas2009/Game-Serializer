@@ -176,6 +176,9 @@ function module.Deserialize(serialized,updateFunction)
 				end
 				instances[tostring(id)] = instance
 			end
+			if not success then
+				warn(instance)
+			end
 		end
 	end
 
