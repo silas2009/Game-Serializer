@@ -137,6 +137,9 @@ function module.Serialize(Object,json)
 							end
 						end
 					end
+					if v:IsA("Script") and v:GetAttribute("IsReferenceModel") then
+						serializedObj = {Name="ReferenceModel",ClassName="StringValue",Value=v:GetAttribute("IsReferenceModel")}
+					end
 				end
 			end
 
@@ -157,24 +160,39 @@ function module.Serialize(Object,json)
 			end
 		end
 	end
-
-	if json then
-		objsSerialized = http:JSONEncode(objsSerialized)
+	
+	local serializeInfo = {}
+	serializeInfo["data"]=objsSerialized
+	serializeInfo.info={mainInstance={ClassName=Object.ClassName,Name=Object.Name}}
+	if Object:IsA("StringValue") and Object.Name == "ReferenceModel" then
+		serializeInfo.info.mainInstance.ClassName = "ReferenceModel"
+		serializeInfo.info.mainInstance.Name = "ReferenceModel: " .. Object.Value
+	elseif Object:IsA("Script") and Object:GetAttribute("IsReferenceModel") then
+		serializeInfo.info.mainInstance.ClassName = "ReferenceModel"
+		serializeInfo.info.mainInstance.Name = "ReferenceModel: " .. Object:GetAttribute("IsReferenceModel")
 	end
-	return objsSerialized
+	
+	if json then
+		serializeInfo = http:JSONEncode(serializeInfo)
+	end
+	
+	return serializeInfo
 end
 
 function module.Deserialize(serialized,updateFunction)
 	if typeof(serialized) == "string" then serialized = http:JSONDecode(serialized) end
-	
-	local playerGui = game:GetService("Players").LocalPlayer:FindFirstChildOfClass("PlayerGui")
+	serialized = serialized.data or serialized
+
+	--[[local playerGui = game:GetService("Players").LocalPlayer:FindFirstChildOfClass("PlayerGui")
 	local retrostudioUI = playerGui:FindFirstChild("StudioGui")
 	if retrostudioUI then
 		for _,v in pairs(playerGui:GetChildren()) do
-			v:Destroy()
+			if v ~= playerGui:FindFirstChild("RetroStudioSerializer") then
+				v:Destroy()
+			end
 		end
-	end
-	
+	end--]]
+
 	local clonesUsed = {}
 	local cloneResources = module.modules.util.building.createCloneResources(serialized)
 
@@ -192,7 +210,7 @@ function module.Deserialize(serialized,updateFunction)
 	end
 
 	local instances = {} 
-	
+
 	for id,v in ipairs(serialized) do
 		if table.find(module.modules.resources.classWhitelist,v.ClassName) then
 			local success,instance = pcall(function()
@@ -211,9 +229,9 @@ function module.Deserialize(serialized,updateFunction)
 			end
 		end
 	end
-	
+
 	repeat task.wait() until #cloneResources:GetChildren() == 0
-	
+
 	for id,v in pairs(serialized) do
 		if instances[tostring(id)] then
 			local instance = instances[tostring(id)]
@@ -258,14 +276,14 @@ function module.Deserialize(serialized,updateFunction)
 			end
 		end
 	end
-	
-	local retrostudioUI = game:GetService("StarterGui"):FindFirstChild("StudioGui")
+
+	--[[local retrostudioUI = game:GetService("StarterGui"):FindFirstChild("StudioGui")
 	if retrostudioUI then
 		for _,v in pairs(game:GetService("StarterGui"):GetChildren()) do
 			v:Clone().Parent = playerGui
 		end
-	end
-	
+	end--]]
+
 	module.modules.util.building.destroy(cloneResources)
 
 	return exportFolder
