@@ -580,7 +580,8 @@ local sideButtons = {
 	},
 	Export = {
 		func = function()
-			writefile(exportsPath .. "/" .. ("%s %s.json"):format(currentExplorer.selected.ClassName,currentExplorer.selected.Name),serializer.Serialize(currentExplorer.selected,true))
+			local serialized = serializer.Serialize(currentExplorer.selected,true)
+			writefile(exportsPath .. "/" .. ("%s %s.json"):format(currentExplorer.selected.ClassName,currentExplorer.selected.Name),serialized)
 			loadExportsList()
 		end,
 		category = {"Explorer"},
@@ -590,6 +591,7 @@ local sideButtons = {
 		func = function()
 			if serializing or not selectedExport then return end
 			serializing = true
+			local progressBar = mainFrame.Explorer.Bottom.Padding:WaitForChild("Progress")
 			serializer.Deserialize(readfile(selectedExport),function(progress,amount,currentState)
 				progressBar.Visible = true
 				progressBar.Fill.BackgroundColor3 = Color3.fromHSV((progress/amount)/3,1,1)
@@ -703,6 +705,7 @@ function loadExportsList()
 		end
 	end
 end
+
 loadExportsList()
 
 tabsUI.Explorer.Button.MouseButton1Click:Connect(function()
