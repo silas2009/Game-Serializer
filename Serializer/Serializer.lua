@@ -165,6 +165,12 @@ function module.Deserialize(serialized,updateFunction)
 	build.setProperty(exportFolder,"Name","Export")
 	local unparentedFolder = build.createObj("Folder", exportFolder)
 	build.setProperty(unparentedFolder,"Name","Unparented")
+	
+	local playerGui = game:GetService("Players").LocalPlayer:FindFirstChildOfClass("PlayerGui")
+	local retrostudioUI = playerGui:FindFirstChild("StudioGui")
+	if retrostudioUI then
+		retrostudioUI:Destroy()
+	end
 
 	local instances = {} 
 	
@@ -173,7 +179,6 @@ function module.Deserialize(serialized,updateFunction)
 			local success,instance = pcall(function()
 				local obj = build.createObj(v.ClassName, unparentedFolder, true, cloneResources, clonesUsed)
 				table.insert(clonesUsed,obj)
-				print(obj)
 				return obj
 			end)
 			if success and instance then
@@ -233,6 +238,11 @@ function module.Deserialize(serialized,updateFunction)
 				end)
 			end
 		end
+	end
+	
+	local retrostudioUI = game:GetService("StarterGui"):FindFirstChild("StudioGui")
+	if retrostudioUI then
+		retrostudioUI:Clone().Parent = playerGui
 	end
 	
 	module.modules.util.building.destroy(cloneResources)
