@@ -16,7 +16,7 @@ function Serialize.BrickColor(Value)
 end
 function Serialize.CFrame(Value)
 	local x, y, z, r0, r1, r2, r10, r11, r12, r20, r21, r22 = Value:components()
-	return {Type = "CFrame",X=x,Y=y,Z=z,R0=r0,R1=r1,R2=r2,R10=r10,R11=r11,R12=r12,R20=r20,R21=r21,R22=r22}
+	return {Type = "CFrame",X=x,Y=y,Z=z,R00=r0,R01=r1,R02=r2,R10=r10,R11=r11,R12=r12,R20=r20,R21=r21,R22=r22}
 end
 function Serialize.UDim2(Value)
 	return {
