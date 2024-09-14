@@ -15,8 +15,14 @@ function Deserialize.BrickColor(Value)
 	return BrickColor.new(Value.Name)
 end
 function Deserialize.CFrame(Value)
-	return CFrame.new(Value.x, Value.y, Value.z, Value.r0, Value.r1, Value.r2, Value.r10, Value.r11, Value.r12,
-		Value.r20, Value.r21, Value.r22)
+	for name,value in pairs(Value) do
+		if typeof(name) == "string" then
+			Value[name:upper()] = value
+			Value[name] = nil
+		end
+	end
+	return CFrame.new(Value.X, Value.Y, Value.Z, Value.R0, Value.R1, Value.R2, Value.R10, Value.R11, Value.R12,
+		Value.R20, Value.R21, Value.R22)
 end
 function Deserialize.UDim2(Value)
 	return UDim2.new(Value.X.Scale,Value.X.Offset,Value.Y.Scale,Value.Y.Offset)
