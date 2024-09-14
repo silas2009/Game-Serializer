@@ -17,8 +17,8 @@ end
 function Deserialize.CFrame(Value)
 	for name,value in pairs(Value) do
 		if typeof(name) == "string" then
-			Value[name:upper()] = value
 			Value[name] = nil
+			Value[name:upper()] = value
 		end
 	end
 	return CFrame.new(Value.X, Value.Y, Value.Z, Value.R00 or Value.R0, Value.R01 or Value.R1, Value.R02 or Value.R2, Value.R10, Value.R11, Value.R12,
