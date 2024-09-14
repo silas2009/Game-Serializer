@@ -21,7 +21,7 @@ function Deserialize.CFrame(Value)
 			Value[name] = nil
 		end
 	end
-	return CFrame.new(Value.X, Value.Y, Value.Z, Value.R0, Value.R1, Value.R2, Value.R10, Value.R11, Value.R12,
+	return CFrame.new(Value.X, Value.Y, Value.Z, Value.R00 or Value.R0, Value.R01 or Value.R1, Value.R02 or Value.R2, Value.R10, Value.R11, Value.R12,
 		Value.R20, Value.R21, Value.R22)
 end
 function Deserialize.UDim2(Value)
