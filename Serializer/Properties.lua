@@ -33,8 +33,6 @@ local BaseClasses = {
 		"Reflectance",
 		"Transparency",
 		"CFrame",
-		"Velocity",
-		"RotVelocity",
 		"Anchored",
 		"CanCollide",
 		"Locked",
