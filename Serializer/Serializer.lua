@@ -248,7 +248,6 @@ function module.Deserialize(serialized,updateFunction)
 					if typeof(propValue) == "table" then
 						if propValue.Type ~= "Instance" then
 							local valueFunction = module.modules.values.valueDeserializer[propValue.Type]
-							print(instance,propValue.Type,valueFunction(propValue))
 							if valueFunction then
 								build.setProperty(instance,propName,valueFunction(propValue))
 							end
