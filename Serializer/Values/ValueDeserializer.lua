@@ -15,7 +15,6 @@ function Deserialize.BrickColor(Value)
 	return BrickColor.new(Value.Name)
 end
 function Deserialize.CFrame(Value)
-	print(Value.X or Value.x, Value.Y or Value.y, Value.Z or Value.z)
 	return CFrame.new(Value.X or Value.x, Value.Y or Value.y, Value.Z or Value.z, Value.R00 or Value.R0 or Value.r0, Value.R01 or Value.R1 or Value.r1, Value.R02 or Value.R2 or Value.r2, Value.R10 or Value.r10, Value.R11 or Value.r11, Value.R12 or Value.r12, Value.R20 or Value.r20, Value.R21 or Value.r21, Value.R22 or Value.r22)
 end
 function Deserialize.UDim2(Value)
