@@ -1,7 +1,7 @@
 local module = {}
 
-local githubLink = "https://raw.githubusercontent.com/silas2009/Game-Serializer/main/Serializer/"
-local classWhitelist = loadstring(game:HttpGet(githubLink .. "Resources/ClassWhitelist.lua"))()
+local link = "https://raw.githubusercontent.com/silas2009/Game-Serializer/main/"
+local classWhitelist = loadstring(game:HttpGet(link .. "Serializer/Resources/ClassWhitelist.lua"))()
 
 local rs = game:GetService("ReplicatedStorage")
 
@@ -75,10 +75,8 @@ function module.createCloneResources(objects)
 	end
 	for className,amount in pairs(classes) do
 		local clone = module.createObj(className,resourceFolder)
-		for i = 1,amount-1 do
-			module.clone(clone,1)
-			task.wait()
-		end
+		module.clone(clone,amount-1)
+		task.wait(1)
 	end
 	return resourceFolder,classes,total
 end
