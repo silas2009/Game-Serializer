@@ -183,7 +183,7 @@ function module.Deserialize(serialized,updateFunction)
 	if typeof(serialized) == "string" then serialized = http:JSONDecode(serialized) end
 	serialized = serialized.data or serialized
 
-	--[[local playerGui = game:GetService("Players").LocalPlayer:FindFirstChildOfClass("PlayerGui")
+	local playerGui = game:GetService("Players").LocalPlayer:FindFirstChildOfClass("PlayerGui")
 	local retrostudioUI = playerGui:FindFirstChild("StudioGui")
 	if retrostudioUI then
 		for _,v in pairs(playerGui:GetChildren()) do
@@ -191,7 +191,7 @@ function module.Deserialize(serialized,updateFunction)
 				v:Destroy()
 			end
 		end
-	end--]]
+	end
 
 	local clonesUsed = {}
 	local cloneResources = module.modules.util.building.createCloneResources(serialized)
@@ -277,12 +277,12 @@ function module.Deserialize(serialized,updateFunction)
 		end
 	end
 
-	--[[local retrostudioUI = game:GetService("StarterGui"):FindFirstChild("StudioGui")
+	local retrostudioUI = game:GetService("StarterGui"):FindFirstChild("StudioGui")
 	if retrostudioUI then
 		for _,v in pairs(game:GetService("StarterGui"):GetChildren()) do
 			v:Clone().Parent = playerGui
 		end
-	end--]]
+	end
 
 	module.modules.util.building.destroy(cloneResources)
 
