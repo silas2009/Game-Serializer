@@ -1,42 +1,66 @@
-local isStudio = game.PlaceId == 5846387555
+local module = {}
 
-if not isStudio then return end
-
+-- services --
 local rs = game:GetService("ReplicatedStorage")
-local ScriptService = rs.ScriptService
-local compression = require(ScriptService.Compression.Legacy)
-local converter = require(ScriptService.LoadModules:FindFirstChild("0000000000000001"))
-local remoteFunctions = rs:WaitForChild("RemoteFunctions",2)
-local createBlock = remoteFunctions and remoteFunctions.ScriptEditor.CreateBlock
-local openScript = remoteFunctions and remoteFunctions.ScriptEditor.OpenScript
-local saveScript = remoteFunctions and remoteFunctions.ScriptEditor.ScriptSaveRequested
-local setValueInput = remoteFunctions and remoteFunctions.ScriptEditor.SetValueInput
-local setVariableInput = remoteFunctions and remoteFunctions.ScriptEditor.SetVariableInput
-local setOutputName = remoteFunctions and remoteFunctions.ScriptEditor.SetOutputName
-local setValueType = remoteFunctions and remoteFunctions.ScriptEditor.SetValueType
 
-function codeToTable(Script)
-	return converter(compression.decompress(Script))
-end
+-- variables --
+local isStudio = game.PlaceId == 5846387555
+local remoteFunctions = rs:FindFirstChild("remoteFunctions")
 
-return function(Object,ScriptString)
-	local Script = codeToTable(ScriptString)
-	Script.Object = Object
-	openScript:InvokeServer(Script.Object)
-	--setclipboard(stringify(Script.Blocks,_,false))
-	for blockName,block in pairs(Script.Blocks) do
-		createBlock:InvokeServer(Script.Object,block.Type,blockName)
-		for InputName,InputData in pairs(block.Inputs) do
-			if InputData.UseVariable then
-				setVariableInput:InvokeServer(Script.Object,blockName,InputName,InputData.Variable)
-			else
-				setValueType:InvokeServer(Script.Object,blockName,InputName,InputData.ValueType)
-				setValueInput:InvokeServer(Script.Object,blockName,InputName,InputData.Value)
-			end
-		end
-		for OutputName,OutputValue in pairs(block.Outputs) do
-			setOutputName:InvokeServer(Script.Object,blockName,OutputName,OutputValue)
-		end
+-- decompiling variables --
+local ss = rs:FindFirstChild("ScriptService")
+local compression = {legacy=require(ss.Compression.Legacy),base93=require(ss.Compression.Base93),zlib=require(ss.Compression.Zlib)}
+local converters = {}
+for _,v in pairs(ss.LoadModules:GetChildren()) do
+	if v:IsA("ModuleScript") then
+		converters[v.Name] = v -- require(v)
 	end
-	saveScript:InvokeServer(Script)
 end
+
+-- importing variables --
+local scriptRemoteFunctions = isStudio and remoteFunctions.ScriptEditor
+local createBlock = isStudio and scriptRemoteFunctions.CreateBlock
+local openScript = isStudio and scriptRemoteFunctions.OpenScript
+local saveScript = isStudio and scriptRemoteFunctions.ScriptSaveRequested
+local setValueInput = isStudio and scriptRemoteFunctions.SetValueInput
+local setVariableInput = isStudio and scriptRemoteFunctions.SetVariableInput
+local setOutputName = isStudio and scriptRemoteFunctions.SetOutputName
+local setValueType = isStudio and scriptRemoteFunctions.SetValueType
+
+-- functions --
+module.import = function(script,code)
+	openScript:InvokeServer(script)
+	-- unfinished
+end
+
+module.decompile = function(script)
+	if not script:IsA("Script") then return end
+	if script:GetAttribute("IsReferenceModel") then return script:GetAttribute("ReferenceModel"),"ReferenceModel" end
+
+	local source = script:GetAttribute("VisualSource")
+	if not source then return end
+
+	local converterVersion = source:sub(2,17)
+	local compressor = compression.base93
+	local converter
+
+	if converters[converterVersion] then -- base93 scripts
+		source = source:sub(19,#source)
+		source = compression.zlib.Deflate.Decompress(compressor.decode(source))
+	else -- legacy scripts
+		compressor = compression.legacy
+		source = compressor.decompress(source)
+		converterVersion = source:sub(1,16)
+	end
+
+	converter = converters[converterVersion]
+	return source,script.ClassName -- converter(source),script.ClassName
+end
+
+--[[local output = module.decompile(workspace.Scripte)
+print(output)
+for i,v in pairs(output.Blocks) do
+	print(i,v)
+end--]]
+
+return module
