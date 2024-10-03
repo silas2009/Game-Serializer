@@ -75,8 +75,10 @@ function module.createCloneResources(objects)
 	end
 	for className,amount in pairs(classes) do
 		local clone = module.createObj(className,resourceFolder)
-		module.clone(clone,amount-1)
-		task.wait(3)
+		for i = 1,amount-1 do
+			module.clone(clone,1)
+			task.wait()
+		end
 	end
 	return resourceFolder,classes,total
 end
