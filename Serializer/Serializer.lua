@@ -30,6 +30,7 @@ module.modules.resources = {
 }
 
 local convertId = module.modules.util.functions.convertId
+local getTrueSize = module.modules.util.functions.getTrueSize
 local build = module.modules.util.building
 
 function module.Serialize(Object,json)
@@ -154,7 +155,7 @@ function module.Serialize(Object,json)
 			for _,prop in pairs(classProp) do
 				local foundObj = table.find(objTable,realObj[prop])
 				v[prop] = {Type = "Instance", ["Instance"] = foundObj}
-				if prop == "Parent" and realObj[prop].Parent == game and table.find(module.settings.allowedServices,realObj[prop].ClassName) then
+				if prop == "Parent" and realObj[prop] and realObj[prop].Parent == game and table.find(module.settings.allowedServices,realObj[prop].ClassName) then
 					v[prop].Instance = realObj[prop].ClassName
 				end
 			end
@@ -183,6 +184,7 @@ function module.Deserialize(serialized,updateFunction)
 	if typeof(serialized) == "string" then serialized = http:JSONDecode(serialized) end
 	serialized = serialized.data or serialized
 
+	-- disable studio UI to prevent some lag
 	local playerGui = game:GetService("Players").LocalPlayer:FindFirstChildOfClass("PlayerGui")
 	local retrostudioUI = playerGui:FindFirstChild("StudioGui")
 	if retrostudioUI then
@@ -192,7 +194,21 @@ function module.Deserialize(serialized,updateFunction)
 			end
 		end
 	end
-
+	
+	-- fix part scaling
+	for id,v in ipairs(serialized) do
+		if table.find(module.modules.resources.classWhitelist,v.ClassName) then
+			local trueSize,mesh = getTrueSize(id,v,serialized)
+			if mesh then
+				mesh = module.Serialize(mesh).data[1]
+				mesh.Parent = {["Instance"]=id,Type="Instance"}
+				print(mesh)
+				table.insert(serialized,mesh)
+			end
+		end
+	end
+	
+	-- create instance resources by cloning instances instead of creating them directly, because cloning has no time out
 	local clonesUsed = {}
 	local cloneResources = module.modules.util.building.createCloneResources(serialized)
 
@@ -211,8 +227,12 @@ function module.Deserialize(serialized,updateFunction)
 
 	local instances = {} 
 
+	local amount = 0
+	
+	-- create instances
 	for id,v in ipairs(serialized) do
 		if table.find(module.modules.resources.classWhitelist,v.ClassName) then
+			amount += 1
 			local success,instance = pcall(function()
 				local obj = build.createObj(v.ClassName, unparentedFolder, true, cloneResources, clonesUsed)
 				table.insert(clonesUsed,obj)
@@ -227,11 +247,16 @@ function module.Deserialize(serialized,updateFunction)
 			if not success then
 				warn(instance)
 			end
+			if amount >= 50 then
+				task.wait(0.05)
+				amount = 0
+			end
 		end
 	end
-
+	-- wait until all instances have been created
 	repeat task.wait() until #cloneResources:GetChildren() == 0
-
+	
+	-- set instance properties
 	for id,v in pairs(serialized) do
 		if instances[tostring(id)] then
 			local instance = instances[tostring(id)]
@@ -277,13 +302,15 @@ function module.Deserialize(serialized,updateFunction)
 		end
 	end
 
+	-- enable the studio ui again
 	local retrostudioUI = game:GetService("StarterGui"):FindFirstChild("StudioGui")
 	if retrostudioUI then
 		for _,v in pairs(game:GetService("StarterGui"):GetChildren()) do
 			v:Clone().Parent = playerGui
 		end
 	end
-
+	
+	-- destroy the folder that contains the instance clones
 	module.modules.util.building.destroy(cloneResources)
 
 	return exportFolder
