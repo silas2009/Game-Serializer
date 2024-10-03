@@ -1,6 +1,7 @@
 local module = {}
 
-local classIcons = loadstring(game:HttpGet("https://raw.githubusercontent.com/silas2009/Game-Serializer/main/Serializer/Resources/ClassIcons.lua"))()
+local link = "https://raw.githubusercontent.com/silas2009/Game-Serializer/main/"
+local classIcons = loadstring(game:HttpGet(link .. "Serializer/Resources/ClassIcons.lua"))()
 
 function module.makeInstanceButton(parent,instance)
 	local a=Instance.new"Frame"
