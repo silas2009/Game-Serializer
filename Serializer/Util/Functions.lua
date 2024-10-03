@@ -1,6 +1,6 @@
 local module = {}
 
-local link = "https://raw.githubusercontent.com/silas2009/Game-Serializer/refs/heads/main/"
+local link = "https://raw.githubusercontent.com/silas2009/Game-Serializer/main/"
 local dsvalue = loadstring(game:HttpGet(link .. "Serializer/Values/ValueDeserializer.lua"))()
 local svalue = loadstring(game:HttpGet(link .. "Serializer/Values/ValueSerializer.lua"))()
 
