@@ -44,6 +44,7 @@ function module.getTrueSize(id,object,serialized)
 				_size = Vector3.new(sizes[1],sizes[1],sizes[1])
 				if truesize ~= _size then
 					object.Shape.Name = "Block"
+					truesize = Vector3.new(math.clamp(truesize.X,0.2,math.huge),math.clamp(truesize.Y,0.2,math.huge),math.clamp(truesize.Z,0.2,math.huge))
 				end
 				mesh = Instance.new("SpecialMesh")
 				mesh.MeshType = (shape == "Cylinder" and Enum.MeshType.Cylinder) or (shape == "Ball" and Enum.MeshType.Sphere)
