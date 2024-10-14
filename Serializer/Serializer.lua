@@ -129,13 +129,13 @@ function module.Serialize(Object,json)
 							end
 							local Function = module.modules.values.valueSerializer[typeof(objProperty)]
 							if Function then
-								serializedObj[prop] = Function(objProperty)
+								objProperty = Function(objProperty)
 							else
-								serializedObj[prop] = objProperty
+								if typeof(objProperty) == "string" then
+									objProperty = convertId(objProperty)
+								end
 							end
-							if typeof(serializedObj[prop]) == "string" then
-								serializedObj[prop] = convertId(serializedObj[prop])
-							end
+							serializedObj[prop] = objProperty
 						end
 					end
 					if v:IsA("Script") and v:GetAttribute("IsReferenceModel") then
