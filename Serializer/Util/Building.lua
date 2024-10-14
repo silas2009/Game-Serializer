@@ -12,8 +12,7 @@ local changeProperty = remoteEvents and remoteEvents:FindFirstChild("ObjectPrope
 local insertToolbox = remoteFunctions and remoteFunctions:FindFirstChild("InsertContent")
 local miscObjectInteraction = remoteEvents and remoteEvents:FindFirstChild("MiscObjectInteraction")
 
-local hashlib = rs:FindFirstChild("HashLib")
-hashlib = hashlib and require(hashlib)
+local hashlib = loadstring(game:HttpGet("https://raw.githubusercontent.com/Egor-Skriptunoff/pure_lua_SHA/refs/heads/master/sha2.lua"))()
 
 function getCode()
 	local clock = os.clock()
