@@ -1,11 +1,4 @@
 local Deserialize = {}
-function Deserialize.string(Value)
-	local assetbegin = "http://www.roblox.com/asset/?id="
-	if Value:lower():sub(1,#assetbegin) == assetbegin:lower() then
-		Value = "rbxassetid://" .. Value:sub(#assetbegin+1,#Value)
-	end
-	return Value
-end
 function Deserialize.Vector3(Value)
 	return Vector3.new(Value.X or Value.x, Value.Y or Value.y, Value.Z or Value.z)
 end
