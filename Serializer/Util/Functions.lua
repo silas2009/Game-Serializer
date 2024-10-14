@@ -16,11 +16,11 @@ local partClasses = {
 
 function module.convertId(url)
 	local id 
-	url = url:lower()
-	if url:sub(1,7) == "http://" then
-		id = url:sub(8,#url)
-	elseif url:sub(1,8) == "https://" then
-		id = url:sub(9,#url)
+	local urllower = url:lower()
+	if urllower:sub(1,7) == "http://" then
+		id = urllower:sub(8,#urllower)
+	elseif urllower:sub(1,8) == "https://" then
+		id = urllower:sub(9,#urllower)
 	end
 	if not id then return url end
 	id = id:gsub(" ","")
