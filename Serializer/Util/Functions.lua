@@ -14,16 +14,23 @@ local partClasses = {
 	"FlagStand"
 }
 
-function module.convertId(assetId)
-	local starts = {
-		"http://www.roblox.com/asset?id="
-	}
-	for i,v in pairs(starts) do
-		if string.sub(assetId,0,#v) == v then
-			return "rbxassetid://" .. string.sub(assetId,#v+1,#assetId)
-		end
+function module.convertId(url)
+	local id 
+	url = url:lower()
+	if url:sub(1,7) == "http://" then
+		id = url:sub(8,#url)
+	elseif url:sub(1,8) == "https://" then
+		id = url:sub(9,#url)
 	end
-	return assetId
+	if not id then return url end
+	id = id:split("/")
+	if id[2] == "asset" and id[3] and id[3]:sub(1,4) == "?id=" then
+		id = id[3]:sub(5,#id[3])
+	elseif id[2] and id[2]:sub(1,9) == "asset?id=" then
+		id = id[2]:sub(10,#id[2])
+	end
+	if typeof(id) ~= "string" then return url end
+	return "rbxassetid://" .. id
 end
 
 function module.getTrueSize(id,object,serialized)
