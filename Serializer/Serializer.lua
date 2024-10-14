@@ -130,10 +130,6 @@ function module.Serialize(Object,json)
 							local Function = module.modules.values.valueSerializer[typeof(objProperty)]
 							if Function then
 								objProperty = Function(objProperty)
-							else
-								if typeof(objProperty) == "string" then
-									objProperty = convertId(objProperty)
-								end
 							end
 							serializedObj[prop] = objProperty
 						end
@@ -295,6 +291,9 @@ function module.Deserialize(serialized,updateFunction)
 							end
 						end
 					else
+						if typeof(propValue) == "string" then
+							propValue = convertId(propValue)
+						end
 						build.setProperty(instance,propName,propValue)
 					end
 				end)
