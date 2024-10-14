@@ -23,6 +23,7 @@ function module.convertId(url)
 		id = url:sub(9,#url)
 	end
 	if not id then return url end
+	id = id:gsub(" ","")
 	id = id:split("/")
 	if id[2] == "asset" and id[3] and id[3]:sub(1,4) == "?id=" then
 		id = id[3]:sub(5,#id[3])
