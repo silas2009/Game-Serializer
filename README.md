@@ -1,3 +1,3 @@
-Basically just some resources for my Roblox RetroStudio serialization script i am creating
+Basically just some resources for my Roblox serialization script
 
 RetroStudio: https://www.roblox.com/games/5846386835/RetroStudio
