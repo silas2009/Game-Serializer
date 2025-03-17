@@ -1,16 +1,20 @@
 local module = {}
 
+-- Services
+local rs = game:GetService("ReplicatedStorage")
+
+-- variables
 local link = "https://raw.githubusercontent.com/silas2009/Game-Serializer/main/"
 local classWhitelist = loadstring(game:HttpGet(link .. "Serializer/Resources/ClassWhitelist.lua"))()
 
-local rs = game:GetService("ReplicatedStorage")
-
-local remoteFunctions = rs:FindFirstChild("RemoteFunctions")
+local remotes = rs:FindFirstChild("Remotes")
+if not remotes then return end
+-- remotes events/functions
 local remoteEvents = rs:FindFirstChild("RemoteEvents")
-local createObject = remoteFunctions and remoteFunctions:FindFirstChild("CreateObject")
-local changeProperty = remoteEvents and remoteEvents:FindFirstChild("ObjectPropertyChangeRequested")
-local insertToolbox = remoteFunctions and remoteFunctions:FindFirstChild("InsertContent")
-local miscObjectInteraction = remoteEvents and remoteEvents:FindFirstChild("MiscObjectInteraction")
+local createObject = remotes:FindFirstChild("CreateObject")
+local changeProperty = remotes:FindFirstChild("ObjectPropertyChangeRequested")
+local insertToolbox = remotes:FindFirstChild("InsertContent")
+local miscObjectInteraction = remotes:FindFirstChild("MiscObjectInteraction")
 
 local hashlib = loadstring(game:HttpGet("https://raw.githubusercontent.com/Egor-Skriptunoff/pure_lua_SHA/refs/heads/master/sha2.lua"))()
 
