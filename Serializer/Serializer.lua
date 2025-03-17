@@ -179,17 +179,6 @@ end
 function module.Deserialize(serialized,updateFunction)
 	if typeof(serialized) == "string" then serialized = http:JSONDecode(serialized) end
 	serialized = serialized.data or serialized
-
-	-- disable studio UI to prevent some lag
-	local playerGui = game:GetService("Players").LocalPlayer:FindFirstChildOfClass("PlayerGui")
-	local retrostudioUI = playerGui:FindFirstChild("StudioGui")
-	if retrostudioUI then
-		for _,v in pairs(playerGui:GetChildren()) do
-			if v ~= playerGui:FindFirstChild("RetroStudioSerializer") then
-				v:Destroy()
-			end
-		end
-	end
 	
 	-- fix part scaling
 	for id,v in ipairs(serialized) do
@@ -298,14 +287,6 @@ function module.Deserialize(serialized,updateFunction)
 					end
 				end)
 			end
-		end
-	end
-
-	-- enable the studio ui again
-	local retrostudioUI = game:GetService("StarterGui"):FindFirstChild("StudioGui")
-	if retrostudioUI then
-		for _,v in pairs(game:GetService("StarterGui"):GetChildren()) do
-			v:Clone().Parent = playerGui
 		end
 	end
 	
