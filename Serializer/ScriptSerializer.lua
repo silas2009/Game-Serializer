@@ -12,9 +12,9 @@ local ss = rs:FindFirstChild("ScriptService")
 local zeros = "000000000000000"
 local compression = {legacy=require(ss.Compression.Legacy),base93=require(ss.Compression.Base93),zlib=require(ss.Compression.Zlib)}
 local converters = {
-	require(script.LoadModules:WaitForChild(zeros.."1")),
-	require(script.LoadModules:WaitForChild(zeros.."2")),
-	require(script.LoadModules:WaitForChild(zeros.."3"))
+	require(ss.LoadModules:WaitForChild(zeros.."1")),
+	require(ss.LoadModules:WaitForChild(zeros.."2")),
+	require(ss.LoadModules:WaitForChild(zeros.."3"))
 }
 
 -- importing variables --
