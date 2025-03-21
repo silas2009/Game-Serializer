@@ -28,24 +28,24 @@ local setOutputName = isStudio and scriptRemotes.SetOutputName
 local setValueType = isStudio and scriptRemotes.SetValueType
 
 -- functions --
-module.import = function(script,code)
-	code.Object = script
+module.import = function(script,source)
+	source.Object = script
 	openScript:InvokeServer(script)
-	for blockName,block in pairs(code.Blocks) do
-		createBlock:InvokeServer(code.Object,block.Type,blockName)
+	for blockName,block in pairs(source.Blocks) do
+		createBlock:InvokeServer(source.Object,block.Type,blockName)
 		for InputName,InputData in pairs(block.Inputs) do
 			if InputData.UseVariable then
-				setVariableInput:InvokeServer(code.Object,blockName,InputName,InputData.Variable)
+				setVariableInput:InvokeServer(source.Object,blockName,InputName,InputData.Variable)
 			else
-				setValueType:InvokeServer(code.Object,blockName,InputName,InputData.ValueType)
-				setValueInput:InvokeServer(code.Object,blockName,InputName,InputData.Value)
+				setValueType:InvokeServer(source.Object,blockName,InputName,InputData.ValueType)
+				setValueInput:InvokeServer(source.Object,blockName,InputName,InputData.Value)
 			end
 		end
 		for OutputName,OutputValue in pairs(block.Outputs) do
-			setOutputName:InvokeServer(code.Object,blockName,OutputName,OutputValue)
+			setOutputName:InvokeServer(source.Object,blockName,OutputName,OutputValue)
 		end
 	end
-	saveScript:InvokeServer(code)
+	saveScript:InvokeServer(source)
 end
 
 module.decompile = function(script)
