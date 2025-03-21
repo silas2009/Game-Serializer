@@ -5,27 +5,27 @@ local rs = game:GetService("ReplicatedStorage")
 
 -- variables --
 local isStudio = game.PlaceId == 5846387555
-local remoteFunctions = rs:FindFirstChild("remoteFunctions")
+local remotes = rs:FindFirstChild("Remotes")
 
 -- decompiling variables --
 local ss = rs:FindFirstChild("ScriptService")
+local zeros = "000000000000000"
 local compression = {legacy=require(ss.Compression.Legacy),base93=require(ss.Compression.Base93),zlib=require(ss.Compression.Zlib)}
-local converters = {}
-for _,v in pairs(ss.LoadModules:GetChildren()) do
-	if v:IsA("ModuleScript") then
-		converters[v.Name] = v -- require(v)
-	end
-end
+local converters = {
+	require(script.LoadModules:WaitForChild(zeros.."1")),
+	require(script.LoadModules:WaitForChild(zeros.."2")),
+	require(script.LoadModules:WaitForChild(zeros.."3"))
+}
 
 -- importing variables --
-local scriptRemoteFunctions = isStudio and remoteFunctions.ScriptEditor
-local createBlock = isStudio and scriptRemoteFunctions.CreateBlock
-local openScript = isStudio and scriptRemoteFunctions.OpenScript
-local saveScript = isStudio and scriptRemoteFunctions.ScriptSaveRequested
-local setValueInput = isStudio and scriptRemoteFunctions.SetValueInput
-local setVariableInput = isStudio and scriptRemoteFunctions.SetVariableInput
-local setOutputName = isStudio and scriptRemoteFunctions.SetOutputName
-local setValueType = isStudio and scriptRemoteFunctions.SetValueType
+local scriptRemotes = isStudio and remotes.ScriptEditor
+local createBlock = isStudio and scriptRemotes.CreateBlock
+local openScript = isStudio and scriptRemotes.OpenScript
+local saveScript = isStudio and scriptRemotes.ScriptSaveRequested
+local setValueInput = isStudio and scriptRemotes.SetValueInput
+local setVariableInput = isStudio and scriptRemotes.SetVariableInput
+local setOutputName = isStudio and scriptRemotes.SetOutputName
+local setValueType = isStudio and scriptRemotes.SetValueType
 
 -- functions --
 module.import = function(script,code)
@@ -55,27 +55,23 @@ module.decompile = function(script)
 	local source = script:GetAttribute("VisualSource")
 	if not source then return end
 
-	local converterVersion = source:sub(2,17)
-	local compressor = compression.base93
-	local converter
-
-	if converters[converterVersion] then -- base93 scripts
-		source = source:sub(19,#source)
-		source = compression.zlib.Deflate.Decompress(compressor.decode(source))
-	else -- legacy scripts
-		compressor = compression.legacy
-		source = compressor.decompress(source)
-		converterVersion = source:sub(1,16)
+	if string.sub(source, 1, 1) == '!' then
+		source = compression.legacy.decompress(source)
+	end
+	if string.sub(source, 1, 16) == "0000000000000001" then
+		return converters[1](source)
+	end
+	if string.sub(source, 1, 16) == "0000000000000002" then
+		return converters[2](source)
+	end
+	if string.sub(source, 1, 18) == "\x1A0000000000000003\x1B" then
+		source = string.sub(source, 19, -1)
+		source = compression.base93.decode(source)
+		source = compression.zlib.Deflate.Decompress(source)
+		return converters[3](source)
 	end
 
-	converter = converters[converterVersion]
-	return source,script.ClassName -- converter(source),script.ClassName
+	return source,script.ClassName
 end
-
---[[local output = module.decompile(workspace.Scripte)
-print(output)
-for i,v in pairs(output.Blocks) do
-	print(i,v)
-end--]]
 
 return module
